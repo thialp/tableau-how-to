@@ -4,21 +4,25 @@ Build the filter panel below from an empty Tableau workbook: a button that opens
 
 <!-- Screenshot goes here after the build: ![The finished filter panel](images/finished.png) -->
 
-**What you need:** Tableau Desktop or Tableau Public (the free app), version 2022.3 or later (for showing and hiding containers with a parameter). Plan on about two hours, or an hour for Part 1 and Part 2 alone.
+**What you need:** Tableau Desktop or Tableau Public (the free app), version 2022.3 or later (for showing and hiding containers with a parameter). Plan on about two hours.
+
+**How the lesson works.** There are 17 steps, and each one builds one worksheet. The downloadable workbook on Tableau Public has the same 17 sheets, named **Step 1 · Try It** to **Step 17 · Title**; each sheet's caption (on its left) holds that step's instructions and every formula to paste. So you can follow this page, the workbook, or both side by side.
 
 **What you'll learn**
 
-| Part | Technique | Used for |
+| Steps | Technique | Used for |
 |---|---|---|
-| 1 | An image as a button: a one-mark sheet, a custom shape, a parameter action | The rail capsule that opens a panel |
-| 1 | Show and hide a container with a parameter | The panel itself, and its ✕ |
-| 1 | The deselect trick | Buttons that never stay highlighted |
-| 2 | A string parameter as a list | Picking several options with a click each |
-| 2 | Storing what's left out instead of what's in | Departments that start ticked when you pick their function |
-| 2 | Cleaning up with `REGEXP_REPLACE` | A function click that also resets its departments |
-| 2 | A guard on the last option | No click can lead to an empty page |
-| 3 | Graying out options with nobody behind them | Two filters that respect each other |
-| Bonus | Reset to default view | One click back to the start |
+| 2 | An image as a button: a one-mark sheet, a custom shape, a parameter action | The rail capsule that opens a panel |
+| 2–3 | Show and hide a container with a parameter | The panel itself, and its ✕ |
+| 3 | The deselect trick | Buttons that never stay highlighted |
+| 4 | A string parameter as a list | Picking several options with a click each |
+| 5 | Storing what's left out instead of what's in | Departments that start ticked when you pick their function |
+| 5 | Cleaning up with `REGEXP_REPLACE` | A function click that also resets its departments |
+| 5 | A guard on the last option | No click can lead to an empty page |
+| 7–12 | The same pattern one level deeper, on your own | Region, country and office |
+| 12 | Graying out options with nobody behind them | Two filters that respect each other |
+| 13 | Reset to default view | One click back to the start |
+| 14–17 | Results you can watch | Number cards, the chart and the finished page |
 
 Arcadia Systems is a fictional company. All data is synthetic.
 
@@ -26,24 +30,35 @@ Arcadia Systems is a fictional company. All data is synthetic.
 
 ## Contents
 
-0. [Get ready](#0-get-ready)
-1. [Part 1: a button made of an image](#part-1-a-button-made-of-an-image)
-   - [Step 1: the capsule](#step-1-the-capsule)
-   - [Step 2: the panel that opens](#step-2-the-panel-that-opens)
+- [0. Get ready](#0-get-ready)
+   - [0.1 Download the files](#01-download-the-files)
+   - [0.2 Install the shapes](#02-install-the-shapes)
+   - [0.3 Connect the data](#03-connect-the-data)
+   - [0.4 Two helper fields you'll use all the time](#04-two-helper-fields-youll-use-all-the-time)
+- [Part 1: a chart to watch, and a button made of an image](#part-1-a-chart-to-watch-and-a-button-made-of-an-image)
+   - [Step 1: the chart you'll watch](#step-1-the-chart-youll-watch)
+   - [Step 2: the capsule, and the panel it opens](#step-2-the-capsule-and-the-panel-it-opens)
    - [Step 3: the ✕, and buttons that never stay highlighted](#step-3-the--and-buttons-that-never-stay-highlighted)
-2. [Part 2: a list you can tick](#part-2-a-list-you-can-tick)
-   - [Step 4: a parameter that holds a list](#step-4-a-parameter-that-holds-a-list)
-   - [Step 5: the function list](#step-5-the-function-list)
-   - [Step 6: departments that follow their function](#step-6-departments-that-follow-their-function)
-   - [Step 7: the last one ticked stays](#step-7-the-last-one-ticked-stays)
-   - [Step 8: make the capsule talk](#step-8-make-the-capsule-talk)
-3. [Part 3: two filters that respect each other](#part-3-two-filters-that-respect-each-other)
-   - [Step 9: your turn, Location](#step-9-your-turn-location)
-   - [Step 10: gray out what's empty](#step-10-gray-out-whats-empty)
-4. [Bonus: reset to default view](#bonus-reset-to-default-view)
-5. [Put the page together](#5-put-the-page-together)
-6. [Checks](#6-checks)
-7. [Why it works this way](#7-why-it-works-this-way)
+- [Part 2: a list you can tick](#part-2-a-list-you-can-tick)
+   - [Step 4: the function list](#step-4-the-function-list)
+   - [Step 5: departments that follow their function](#step-5-departments-that-follow-their-function)
+   - [Step 6: make the capsule talk](#step-6-make-the-capsule-talk)
+- [Part 3: two filters that respect each other](#part-3-two-filters-that-respect-each-other)
+   - [Step 7: your turn, Location](#step-7-your-turn-location)
+   - [Step 8: the Location sub-line](#step-8-the-location-sub-line)
+   - [Step 9: the Location ✕](#step-9-the-location-)
+   - [Step 10: the region list](#step-10-the-region-list)
+   - [Step 11: the country list](#step-11-the-country-list)
+   - [Step 12: the office list, then gray out what's empty](#step-12-the-office-list-then-gray-out-whats-empty)
+- [Part 4: reset, and the finished page](#part-4-reset-and-the-finished-page)
+   - [Step 13: reset to default view](#step-13-reset-to-default-view)
+   - [Step 14: the employees card](#step-14-the-employees-card)
+   - [Step 15: the departments card](#step-15-the-departments-card)
+   - [Step 16: the offices card](#step-16-the-offices-card)
+   - [Step 17: the title, and the finished page](#step-17-the-title-and-the-finished-page)
+- [Use it on your own data](#use-it-on-your-own-data)
+- [Checks](#checks)
+- [Why it works this way](#why-it-works-this-way)
 
 ---
 
@@ -73,7 +88,7 @@ Unzip `arcadia_how_to_shapes.zip`. You'll get a folder **Arcadia How-To** holdin
 | `capsule_light.png` | 600 × 96 | The rail button when a choice is on |
 | `tick_on.png` | 36 × 36 | A ticked box (teal, white tick) |
 | `tick_off.png` | 36 × 36 | An empty box |
-| `reset_button.png` | 600 × 96 | "Reset to default view" (Bonus) |
+| `reset_button.png` | 600 × 96 | "Reset to default view" (Step 13) |
 | `popover_line.png` | 1248 × 18 | The thin line under a panel's title |
 | `rail_divider.png` | 400 × 48 | The line across the rail |
 | `arcadia_logo_reverse.png` | 1200 × 326 | The logo for the rail |
@@ -104,7 +119,9 @@ COUNT([employee_id])
 
 `Employees` is the number you show. `One` is a 1 on every row, so `SUM(IF ... THEN [One] END)` counts the rows that pass a test, which is how the lists will ask "is anybody behind this option?"
 
-### 0.5 The "try it" sheet
+## Part 1: a chart to watch, and a button made of an image
+
+### Step 1: the chart you'll watch
 
 Every step changes what this one sheet shows, so you can see your work.
 
@@ -114,13 +131,15 @@ Every step changes what this one sheet shows, so you can see your work.
 
 **You should see** 31 bars, starting with Core Platform Engineering. Leave it like this; in Step 4 you'll add one filter to it.
 
----
+**Tidy it for the finished page**, where it sits in a narrow column: title hidden; rows a fixed **17 px** high (Format > Cell size, or drag a row border), so a short list doesn't stretch into giant bars and all 31 departments fit the card without a scroll bar; View **Fit Width**; bar size about a third of the slider; label `<Employees>` Tableau Semibold 9 navy at the end of each bar; the Columns axis hidden; tooltip `<department_name>` / `<Employees> employees in scope`, command buttons off.
 
-## Part 1: a button made of an image
+> **If the sheet shows nothing at all**, look for a red pill on the Marks card. A field that is already on Rows doesn't also need to sit on Tooltip; Tableau can mark the second copy invalid, and an invalid field blanks the whole view. Insert it into the tooltip text instead, which works because every field in the view is available there.
+
+---
 
 The rail capsules on the [Arcadia dashboards](https://public.tableau.com/app/profile/thialp) aren't Tableau filters. Each is a sheet with exactly one mark. The mark is drawn with a custom shape (the capsule picture), its label is the text, and a click on it runs a parameter action. That's the whole idea of an image button.
 
-### Step 1: the capsule
+### Step 2: the capsule, and the panel it opens
 
 **Why.** A sheet with no dimension in the view draws one mark. Give that mark a picture and a click action, and you have a button you can style any way you like.
 
@@ -132,7 +151,7 @@ The rail capsules on the [Arcadia dashboards](https://public.tableau.com/app/pro
    |---|---|---|
    | `p_OrgOpen` | Boolean | False |
 
-   Boolean parameters show True and False; that's all we need. Repeat for **`p_LocOpen`** (Boolean, False), which you'll use in Step 9.
+   Boolean parameters show True and False; that's all we need. Repeat for **`p_LocOpen`** (Boolean, False), which you'll use in Step 7.
 
 2. Create these calculated fields:
 
@@ -166,7 +185,7 @@ FALSE
 "All functions"
 ```
 
-`Org Capsule Shape` and `Org Field Text` are placeholders: Step 8 makes them follow the selection.
+`Org Capsule Shape` and `Org Field Text` are placeholders: Step 6 makes them follow the selection.
 
 3. New sheet, name it **Org Field**.
    - Marks type **Shape**. Drag `Org Capsule Shape` to Shape. Click **Shape**, pick the palette **Arcadia How-To**, and assign `capsule_dark.png` to the value `capsule_dark`.
@@ -179,13 +198,13 @@ FALSE
 
 **Try it.** Click the capsule. It highlights and stays highlighted. Step 3 fixes that.
 
-### Step 2: the panel that opens
+#### The panel that opens
 
 **Why.** A dashboard container can be shown or hidden by a Boolean parameter. The capsule click flips the parameter, so the container appears and disappears.
 
 **Do.**
 
-1. Create a new dashboard, **Step 2**, size **Fixed 1400 × 850**. Shading `#F3F3EF`.
+1. Create a new dashboard, **Multi-select filters**, size **Fixed 1400 × 850**. Shading `#F3F3EF`.
 2. Drag a **Vertical** container onto the dashboard, **floating**: x 0, y 0, w 216, h 850. Background navy `#13233A`. This is the rail.
 3. Drag **Org Field** into the rail. Hide its title. Fixed height 32.
 4. Drag another **Vertical** container, floating, to x 216, y 96, w 640, h 700. Its top lines up with the ORGANIZATION heading in the rail. Background `#13233A`, no border. Name it **Org Popover** (Layout pane > Item hierarchy, double-click the name).
@@ -198,6 +217,8 @@ FALSE
    | Open org popover | Org Field | Select | p_OrgOpen | Toggle Org Panel | None | Keep current value |
 
 **You should see** a navy rail with the capsule and no panel. Click the capsule: the panel appears. Click it again: the panel... doesn't close. Why? The first click left the capsule selected, so the second click only clears the selection, and clearing keeps the parameter as it was. That's Step 3.
+
+---
 
 ### Step 3: the ✕, and buttons that never stay highlighted
 
@@ -228,7 +249,7 @@ FALSE
    |---|---|---|---|---|
    | Org closes Loc | Change Parameter | Org Field | p_LocOpen | Close Panel |
 
-   The Location capsule (Step 9) gets the mirror action, so opening one closes the other.
+   The Location capsule (Step 7) gets the mirror action, so opening one closes the other.
 
 **You should see** the capsule open and close the panel on every click, the ✕ close it, and nothing ever stay highlighted.
 
@@ -240,7 +261,9 @@ FALSE
 
 Tableau has no parameter that holds several values. So we keep them in a string: `|People|Finance|`. Each name sits between two bars, so `CONTAINS([p_Functions], "|People|")` tests for one name without matching a longer one by accident. An empty string means "everything".
 
-### Step 4: a parameter that holds a list
+### Step 4: the function list
+
+#### A parameter that holds a list
 
 **Do.**
 
@@ -251,7 +274,7 @@ Tableau has no parameter that holds several values. So we keep them in a string:
    | `p_Functions` | String | (empty) | The functions you ticked: `\|People\|Finance\|` |
    | `p_DeptOff` | String | (empty) | The departments you **un**ticked: `\|People>Talent Acquisition\|` |
 
-   Why the second one stores what's left out comes in Step 6.
+   Why the second one stores what's left out comes in Step 5.
 
 2. Create:
 
@@ -279,7 +302,7 @@ Tableau has no parameter that holds several values. So we keep them in a string:
 
 **Try it.** Show the parameter control for `p_Functions` (right-click > Show Parameter) and type `|People|`. Try It shows four bars: HR Business Partners 389, Talent Acquisition 388, Total Rewards 221, People Analytics 180. Type `|People|Finance|`: seven bars. Then type `|People>Talent Acquisition|` into `p_DeptOff`: Talent Acquisition goes. Empty both boxes and hide the controls again; from now on clicks will write them.
 
-### Step 5: the function list
+#### The list itself
 
 **Why.** One click must add the name if it isn't in the string, and take it out if it is. A calculation can build the new string for each mark, and a parameter action writes the string of the mark you clicked.
 
@@ -334,7 +357,9 @@ Why the ticks are all empty at the start: with nothing chosen, every function is
 
 **You should see** eight empty boxes, Commercial to Technology. Click People: it ticks, and Try It shows only People's four departments. Click Finance: both ticked, seven bars. Click People again: only Finance remains. Click Finance: empty again, 31 bars.
 
-### Step 6: departments that follow their function
+---
+
+### Step 5: departments that follow their function
 
 **Why.** When you pick People, you expect all four People departments to be in, and then you untick the one you don't want. So the department parameter stores **exclusions**: a department is in when its function is in and it isn't on the "off" list. Every department of a newly picked function starts ticked, with no extra work.
 
@@ -403,7 +428,7 @@ Worked example, with `p_DeptOff` = `|People>Talent Acquisition|Finance>FP&A|`: a
    - Filter `Dept Visible` = True. (This filter is fine: it hides departments of unpicked functions, which is what the panel should do.)
    - Rows `Dept Key`, header hidden. Because the key starts with the function, the departments come out sorted by function, so each function's departments sit together. Columns `Tick X`, Fixed 0 to 10, hidden.
 
-     Why not `function_name` then `department_name` as two row headers? A group with a single row loses its heading in Tableau, so in Location (Step 9), every country with one office would show a blank. One flat list, sorted by its key, avoids that everywhere.
+     Why not `function_name` then `department_name` as two row headers? A group with a single row loses its heading in Tableau, so in Location (Step 7), every country with one office would show a blank. One flat list, sorted by its key, avoids that everywhere.
    - Shape `Dept Shape` (`tick_on`, `tick_off`); Label `  <department_name>`; Detail `Dept Pick`, `zzTrue`, `zzFalse`.
    - Same format and tooltip-off as Function List.
 4. Put **Dept List** in **Org Popover** to the right of Function List (width 420). Actions:
@@ -415,7 +440,7 @@ Worked example, with `p_DeptOff` = `|People>Talent Acquisition|Finance>FP&A|`: a
 
 **You should see** all 31 departments ticked under their functions when nothing is picked. Pick People: only People's four show, all ticked. Untick Talent Acquisition: Try It shows 3 bars, 790 people. Untick People, then pick it again: all four are back. That's the clean-up.
 
-### Step 7: the last one ticked stays
+#### The last one ticked stays
 
 **Why.** Untick every department of a function and the page has nothing to show. Instead, the last ticked department locks: its click writes back the string as it was, so nothing changes.
 
@@ -472,7 +497,9 @@ On **Dept List**, replace the label with two runs on one line: `  <Dept Name On>
 
 > **Why `ZN()`?** A sum over no rows is NULL in Tableau, not 0. `ZN()` turns it into 0 so the comparison works.
 
-### Step 8: make the capsule talk
+---
+
+### Step 6: make the capsule talk
 
 **Why.** "All functions" should change to say what you picked, and the capsule should turn white so it's obvious a filter is on.
 
@@ -517,7 +544,7 @@ On **Dept List**, replace the label with two runs on one line: `  <Dept Name On>
 
 The curly braces with nothing before the colon are a FIXED level of detail over the whole data source, written short. They give one number however the sheet is built.
 
-2. Edit the two placeholders from Step 1, and add the text fields:
+2. Edit the two placeholders from Step 2, and add the text fields:
 
 ```
 // Org Field Text
@@ -564,9 +591,9 @@ ELSE STR([N Depts In]) + " of " + STR([N Depts Offered]) + " departments" END
 
 ## Part 3: two filters that respect each other
 
-### Step 9: your turn, Location
+### Step 7: your turn, Location
 
-Build the Location filter yourself, with the same pattern one level deeper: **region > country > office**. Use the hints first; the full answer is below them, and the finished Location sheets are in the downloadable workbook (Loc Field, Region List, Country List, Office List and the rest), so you can open them and compare.
+Build the Location filter yourself, with the same pattern one level deeper: **region > country > office**. This step makes the capsule and every Location field; Steps 8 to 12 build the other Location sheets. Use the hints first; the full answer is below them, and the finished Location sheets are in the downloadable workbook (Loc Field, Region List, Country List, Office List and the rest), so you can open them and compare.
 
 **Hints**
 
@@ -734,7 +761,7 @@ SUM(IF [Dept In] AND [Office In] THEN [One] END)
 MIN({ FIXED : SUM(IF [Dept In] AND [Office In] THEN [One] END) })
 ```
 
-Sheets: **Loc Field**, **Loc Sub**, **Loc Close**, **Region List** (Rows `region`), **Country List** (Filter `Country Visible` = True; Rows `Country Key`, header hidden; label `  <country_name>`), **Office List** (Filter `Office Visible` = True; Rows `Office Key`, header hidden; label `  <ATTR(country_name)> · <office_name>`, the country in `#8FA0B8`), each built like its Organization twin. Locked names use the two-run label of Step 7.
+Sheets: **Loc Field**, **Loc Sub**, **Loc Close**, **Region List** (Rows `region`), **Country List** (Filter `Country Visible` = True; Rows `Country Key`, header hidden; label `  <country_name>`), **Office List** (Filter `Office Visible` = True; Rows `Office Key`, header hidden; label `  <ATTR(country_name)> · <office_name>`, the country in `#8FA0B8`), each built like its Organization twin. Locked names use the two-run label of Step 5.
 
 Popover **Loc Popover**: floating at x 216, y 96, w 640, h 744 (the same top as Organization, down to the foot of the page, so all 35 offices fit without a scroll bar), visibility `p_LocOpen`; Region List 170, Country List 190, Office List 280.
 
@@ -765,7 +792,73 @@ Actions (plus a deselect on every one of these sheets):
 
 To read the total on Try It, turn on **Analysis > Totals > Show Column Grand Totals**.
 
-### Step 10: gray out what's empty
+---
+
+### Step 8: the Location sub-line
+
+Sheet **Loc Sub**, built like Org Sub in Step 6: Marks **Text**, `<Loc Sub Text>` Tableau Book 9 `#8A97A8`, left. Detail `zzTrue`, `zzFalse`; tooltip off; a deselect action. In the rail under Loc Field, height 18.
+
+**You should see** "5 regions · 35 offices" with nothing chosen.
+
+---
+
+### Step 9: the Location ✕
+
+Sheet **Loc Close**, built like Org Close in Step 3: Marks **Text**, `✕` typed into the label (Tableau Book 12, `#B8C0CC`), centered. Detail `Close Panel`, `zzTrue`, `zzFalse`. Tooltip `Close`, command buttons off. Put it at the right of the Loc Popover's title row.
+
+Actions: **Loc popover on ✕** (Change Parameter, Loc Close, `p_LocOpen` ← `Close Panel`) and **Deselect Loc Close**.
+
+---
+
+### Step 10: the region list
+
+Sheet **Region List**, built like Function List in Step 4: Rows `region` (header hidden); Columns `Tick X`, Fixed 0 to 10, hidden; Marks **Shape**, Shape `Region Shape` (`tick_on`, `tick_off`); label `  <region>`; Detail `Region Pick`, `Region CountryOff Pick`, `Region OfficeOff Pick`, `zzTrue`, `zzFalse`; tooltip off; Fit Entire View.
+
+Actions: **Toggle region** (`p_Regions` ← `Region Pick`), **Region cleans countries** (`p_CountryOff` ← `Region CountryOff Pick`), **Region cleans offices** (`p_OfficeOff` ← `Region OfficeOff Pick`), and the deselect. Put it in the Loc Popover's body, width 170.
+
+**You should see** five empty boxes, Asia Pacific to North America. Pick Asia Pacific: Try It shows 9,005 people.
+
+---
+
+### Step 11: the country list
+
+Sheet **Country List**, built like Dept List in Step 5: Filter `Country Visible` = True; Rows `Country Key` (header hidden); Columns `Tick X`, hidden; Shape `Country Shape`; label in two runs, `  <Country Name On>` `#E4E9F0` and `<Country Name Locked>` `#8FA0B8`, with
+
+```
+// Country Name On
+IF NOT [Country Locked] THEN MIN([country_name]) END
+```
+
+```
+// Country Name Locked
+IF [Country Locked] THEN MIN([country_name]) END
+```
+
+Detail `Country Pick`, `Country OfficeOff Pick`, `zzTrue`, `zzFalse`. Actions: **Toggle country** (`p_CountryOff` ← `Country Pick`), **Country cleans offices** (`p_OfficeOff` ← `Country OfficeOff Pick`), and the deselect. In the Loc Popover, width 190.
+
+**You should see** all 22 countries ticked. Pick Asia Pacific: only its six countries show.
+
+---
+
+### Step 12: the office list, then gray out what's empty
+
+Sheet **Office List**, the last list: Filter `Office Visible` = True; Rows `Office Key` (header hidden); Columns `Tick X`, hidden; Shape `Office Shape`; label `  <ATTR(country_name)> · ` in `#8FA0B8`, then `<Office Name On>` `#E4E9F0` and `<Office Name Locked>` `#8FA0B8`, with
+
+```
+// Office Name On
+IF NOT [Office Locked] THEN MIN([office_name]) END
+```
+
+```
+// Office Name Locked
+IF [Office Locked] THEN MIN([office_name]) END
+```
+
+Detail `Office Pick`, `zzTrue`, `zzFalse`. Actions: **Toggle office** (`p_OfficeOff` ← `Office Pick`) and the deselect. In the Loc Popover, width 280.
+
+With the office list done, both filters exist. The last piece is making them respect each other.
+
+#### Gray out what's empty
 
 **Why.** Pick Middle East & Africa and untick South Africa, so only Dubai is left. Then open Organization: Analytics Engineering and People Analytics have nobody in Dubai. Ticking them would show nothing, so they should look disabled and do nothing when clicked. The same goes the other way: pick Finance, then open Location, and Portugal has no Finance employees.
 
@@ -844,7 +937,59 @@ IF [Dept Locked] AND NOT [Dept Dim] THEN MIN([department_name]) END
 IF [Dept Dim] THEN MIN([department_name]) END
 ```
 
-Label: `  <Dept Name On><Dept Name Locked><Dept Name Dim>`, colors `#E4E9F0`, `#8FA0B8`, `#4F6178`. Do the same for functions (On and Dim), regions, countries and offices.
+Label: `  <Dept Name On><Dept Name Locked><Dept Name Dim>`, colors `#E4E9F0`, `#8FA0B8`, `#4F6178`. Do the same for the other four lists:
+
+```
+// Function Name On
+IF NOT [Function Dim] THEN MIN([function_name]) END
+```
+
+```
+// Function Name Dim
+IF [Function Dim] THEN MIN([function_name]) END
+```
+
+```
+// Region Name On
+IF NOT [Region Dim] THEN MIN([region]) END
+```
+
+```
+// Region Name Dim
+IF [Region Dim] THEN MIN([region]) END
+```
+
+```
+// Country Name On
+IF NOT [Country Locked] AND NOT [Country Dim] THEN MIN([country_name]) END
+```
+
+```
+// Country Name Locked
+IF [Country Locked] AND NOT [Country Dim] THEN MIN([country_name]) END
+```
+
+```
+// Country Name Dim
+IF [Country Dim] THEN MIN([country_name]) END
+```
+
+```
+// Office Name On
+IF NOT [Office Locked] AND NOT [Office Dim] THEN MIN([office_name]) END
+```
+
+```
+// Office Name Locked
+IF [Office Locked] AND NOT [Office Dim] THEN MIN([office_name]) END
+```
+
+```
+// Office Name Dim
+IF [Office Dim] THEN MIN([office_name]) END
+```
+
+Function List's label becomes `  <Function Name On><Function Name Dim>`, Region List's `  <Region Name On><Region Name Dim>`, and Country and Office List get the third run, in `#4F6178`.
 
 4. Dimmed boxes: the tick shape stays as it is (an empty box), and the name's dark color does the talking. No new image is needed.
 
@@ -860,7 +1005,9 @@ Click a grayed name: nothing changes.
 
 ---
 
-## Bonus: reset to default view
+## Part 4: reset, and the finished page
+
+### Step 13: reset to default view
 
 One button that empties every string parameter and closes every panel.
 
@@ -890,54 +1037,96 @@ One button that empties every string parameter and closes every panel.
 
 ---
 
-## 5. Put the page together
+### Step 14: the employees card
 
-The point of the page is to **watch the filter work**. A popover opens over the left part of the page (x 216 to 856), so everything that changes when you click sits to its right: three number cards and a bar chart. The space under the popover holds a "Try it" card you read before you open a panel.
-
-### 5.1 The number cards
+The finished page shows the filters working: three number cards and the chart, all to the right of the popovers (which open over x 216 to 856), so you can watch them change while a panel is open.
 
 ```
 // People In
 SUM(IF [In Scope] THEN [One] END)
 ```
 
+Give it the number format **Number, 0 decimals, thousands separator**.
+
+Sheet **KPI Employees**: no field on Rows or Columns, so it draws one mark. Marks **Text**, left aligned, top: line 1 `EMPLOYEES` Tableau Semibold 8 `#5A6170`; line 2 `<People In>` Tableau Bold 24 navy `#13233A`. Detail `zzTrue`, `zzFalse`; tooltip off; a deselect action.
+
+**You should see** 30,005. Pick People: 1,178.
+
+---
+
+### Step 15: the departments card
+
 ```
 // Depts In Scope
 COUNTD(IF [In Scope] THEN [department_name] END)
 ```
+
+Sheet **KPI Departments**, built like KPI Employees: line 1 `DEPARTMENTS`; line 2 `<Depts In Scope>` Tableau Bold 24 navy, then ` of <N Depts>` Tableau Book 12 `#5A6170`.
+
+The card counts departments with somebody who passes **both** filters, so it shows the two filters working together.
+
+**You should see** "31 of 31". Pick Middle East & Africa and untick South Africa: "29 of 31", because two departments have nobody in Dubai.
+
+---
+
+### Step 16: the offices card
 
 ```
 // Offices In Scope
 COUNTD(IF [In Scope] THEN [office_name] END)
 ```
 
-Give `People In` the number format **Number, 0 decimals, thousands separator**.
+Sheet **KPI Offices**, built like KPI Departments: line 1 `OFFICES`; line 2 `<Offices In Scope>` then ` of <N Offices>`.
 
-Three sheets, each with no field on Rows or Columns, so each draws one mark. Marks **Text**, left aligned, top:
+**You should see** "35 of 35". Pick People: "34 of 35"; one office has no People team.
 
-| Sheet | Line 1 (Tableau Semibold 8, `#5A6170`) | Line 2 (Tableau Bold 24, navy `#13233A`) |
-|---|---|---|
-| **KPI Employees** | `EMPLOYEES` | `<People In>` |
-| **KPI Departments** | `DEPARTMENTS` | `<Depts In Scope>` then, in Book 12 `#5A6170`, ` of <N Depts>` |
-| **KPI Offices** | `OFFICES` | `<Offices In Scope>` then, in Book 12 `#5A6170`, ` of <N Offices>` |
+---
 
-Detail `zzTrue`, `zzFalse`; tooltip off; deselect action on each. The cards count only what passes **both** filters, which is how you see the two filters respect each other.
+### Step 17: the title, and the finished page
 
-### 5.2 The bar chart
+The title says what the page shows, in words that follow the filters.
 
-**Try It** from 0.5, tidied for a narrow column: title hidden; rows a fixed **17 px** high (Format > Cell size, or drag a row border), so a short list doesn't stretch into giant bars and all 31 departments fit the card without a scroll bar; View **Fit Width**; bar size about a third of the slider; label `<Employees>` Tableau Semibold 9 navy at the end of each bar; the Columns axis hidden; tooltip `<department_name>` / `<Employees> employees in scope`, command buttons off.
+```
+// As Of
+{ MIN([as_of_date]) }
+```
 
-> **If the sheet shows nothing at all**, look for a red pill on the Marks card. A field that is already on Rows doesn't also need to sit on Tooltip; Tableau can mark the second copy invalid, and an invalid field blanks the whole view. Insert it into the tooltip text instead, which works because every field in the view is available there.
+```
+// As Of Text
+LEFT(DATENAME("month", [As Of]), 3) + " " + STR(DAY([As Of])) + ", " + STR(YEAR([As Of]))
+```
 
-### 5.3 The layout
+```
+// Scope Text
+IF [Org Is All] AND [Loc Is All] THEN "all of Arcadia Systems"
+ELSE (IF [Org Is All] THEN "" ELSE [Org Field Text]
+      + (IF [p_DeptOff] = "" THEN "" ELSE " (" + [Org Sub Text] + ")" END) END)
+   + (IF NOT [Org Is All] AND NOT [Loc Is All] THEN " in " ELSE "" END)
+   + (IF [Loc Is All] THEN "" ELSE [Loc Field Text]
+      + (IF [p_CountryOff] = "" AND [p_OfficeOff] = "" THEN "" ELSE " (" + STR([N Offices In]) + " offices)" END) END)
+END
+```
+
+```
+// Page Subtitle
+"Employees on " + [As Of Text] + " · " + [Scope Text]
+```
+
+No year is typed anywhere: the date comes from the data, so a newer file updates the title on its own.
+
+Sheet **Title**: Marks **Text**, line 1 `Who works where` Tableau Bold 18 navy, line 2 `<Page Subtitle>` Tableau Book 11 `#5A6170`; left, top. Detail `zzTrue`, `zzFalse`; tooltip off; a deselect action.
+
+**You should see** "Employees on Jun 30, 2026 · all of Arcadia Systems". Pick People and Asia Pacific, untick Pune: "People in Asia Pacific (8 offices)".
+
+#### The finished page
 
 Dashboard **Multi-select filters**, Fixed 1400 × 850, shading `#F3F3EF`, every item floating:
 
 | Item | x | y | w | h | Notes |
 |---|---:|---:|---:|---:|---|
 | Rail (vertical container) | 0 | 0 | 216 | 850 | Navy `#13233A`, padding 8 left and right |
-| Page title (sheet) | 240 | 16 | 1136 | 60 | "Who works where" Tableau Bold 18 navy, then `<Page Subtitle>` |
-| Try it card (text in a white container) | 240 | 88 | 600 | 724 | The click tests of section 6, as short lines |
+| Title (sheet) | 240 | 16 | 1136 | 60 | Step 17 |
+| Lesson card (text and images in a white container) | 240 | 88 | 600 | 724 | What the page is, the five images, how to try it, how to build it, how to use your own data |
 | KPI Employees / Departments / Offices (each in a white container) | 872 / 1044 / 1216 | 88 | 160 | 96 | Radius 14, border 1 px `#E4E3DD`, padding 14 |
 | Chart card (white container) | 872 | 196 | 504 | 616 | Text "Employees by department" Semibold 11 navy, then Try It |
 | Footnote (text) | 240 | 826 | 1136 | 16 | "Arcadia Systems is fictional; all data is synthetic." Book 9 `#5A6170` |
@@ -952,7 +1141,20 @@ The popovers sit in front of everything; the rail in front of the page.
 
 ---
 
-## 6. Checks
+## Use it on your own data
+
+Arcadia's file is deliberately plain: one row per person, a few text columns. Most data you'll meet looks the same, so the pattern carries over as it is.
+
+- **Two levels** (Steps 2 to 6): swap `function_name` and `department_name` for any parent and child in your data: category and sub-category, business unit and team, product line and product.
+- **Three levels** (Steps 7 to 12): swap `region`, `country_name` and `office_name` for any three: region, state and city; division, department and team; brand, family and SKU.
+- **The count**: `[One]` counts rows. If a row in your data isn't one thing (a sale, a ticket), keep `[One]` for "is anybody behind this option?" and put your own measure on the chart and cards.
+- **Names with special characters**: escape them before the clean-up, as the note in Step 5 says.
+
+Change the field names in the formulas and the parameters keep working: they only ever hold text.
+
+---
+
+## Checks
 
 Run these in Presentation mode, then again after publishing.
 
@@ -973,7 +1175,7 @@ Run these in Presentation mode, then again after publishing.
 
 ---
 
-## 7. Why it works this way
+## Why it works this way
 
 - **Why not a regular multi-select filter?** A Tableau filter can't tick its children for you, lock its last option, or gray out options because of another filter's state. It also draws its own control, which can't look like a rail capsule. Parameters plus calculations give you all of that, at the cost of more fields.
 - **Why exclusions for children?** Because "everything under a picked parent" is the default you want. Storing exclusions makes the default free and the clean-up one regular expression.
