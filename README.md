@@ -4,19 +4,23 @@ Step-by-step Tableau lessons built on **Arcadia Systems**, a fictional company w
 
 | # | Lesson | You'll build | Level |
 |---|---|---|---|
-| 1 | [Multi-select filters with clicks and images](01-multi-select-filters/) | A rail button that opens a panel, tick lists with a parent-to-child cascade, a guard on the last option, and options that gray out across two filters | Intermediate |
+| 1 | [Multi-select filters from shapes](01-multi-select-filters/) | A rail button that opens a panel, tick lists with a parent-to-child cascade, a guard on the last option, and options that gray out across two filters | Intermediate |
 | 2 | Period selection *(coming next)* | Year over year, year to date, quarter and month comparisons from one picker | Intermediate |
 
 ## How each lesson is laid out
 
+Each lesson has its own folder. Open it and the first thing you see is a **Download everything** link: one zip with the data and the images. Below that, three lines to get started, and a link to the full step-by-step guide.
+
 ```
 01-multi-select-filters/
-├── README.md            the guide, step by step
-├── data/                the CSV (and how it was made)
-└── shapes/              the button and tick images, zipped for My Tableau Repository/Shapes
+├── README.md                          download link and how to start
+├── GUIDE.md                           every step, with the reasons behind it
+├── multi-select-filters-files.zip     the data and the images, in one download
+├── data/                              the CSV, to preview here
+└── shapes/                            the images, to preview here
 ```
 
-The finished workbook for each lesson is on Tableau Public with **download on**, so you can open every step's sheet and compare it with yours.
+The finished workbook for each lesson is on Tableau Public with **download on**: every step is a tab, and each tab's caption holds its instructions.
 
 ## The data
 
@@ -30,4 +34,4 @@ The images follow the Arcadia design system, published as the [Arcadia Analytics
 
 ## License
 
-Code and data under the [MIT License](LICENSE).
+Code and data under the [MIT License](LICENSE). How the data was made from the Arcadia warehouse is in [`tools/`](tools/); you don't need it for any lesson.
