@@ -6,7 +6,7 @@ Build the filter panel below from an empty Tableau workbook: a button that opens
 
 **What you need:** Tableau Desktop or Tableau Public (the free app), version 2022.3 or later (for showing and hiding containers with a parameter). Plan on about two hours.
 
-**How the lesson works.** There are 17 steps, and each one builds one worksheet. The downloadable workbook on Tableau Public has the same 17 sheets, named **Step 1 · Try It** to **Step 17 · Title**; each sheet's caption (on its left) holds that step's instructions and every formula to paste. So you can follow this page, the workbook, or both side by side.
+**How the lesson works.** There are 19 steps, and each one builds one worksheet. The downloadable workbook on Tableau Public has the same 19 sheets, named **Step 1 · Try It** to **Step 19 · LinkedIn Link**; each sheet's caption (on its left) holds that step's instructions and every formula to paste. So you can follow this page, the workbook, or both side by side.
 
 **What you'll learn**
 
@@ -23,6 +23,7 @@ Build the filter panel below from an empty Tableau workbook: a button that opens
 | 12 | Graying out options with nobody behind them | Two filters that respect each other |
 | 13 | Reset to default view | One click back to the start |
 | 14–17 | Results you can watch | Number cards, the chart and the finished page |
+| 18–19 | An image that opens a web page | Link buttons with a Go to URL action |
 
 Arcadia Systems is a fictional company. All data is synthetic.
 
@@ -56,6 +57,8 @@ Arcadia Systems is a fictional company. All data is synthetic.
    - [Step 15: the departments card](#step-15-the-departments-card)
    - [Step 16: the offices card](#step-16-the-offices-card)
    - [Step 17: the title, and the finished page](#step-17-the-title-and-the-finished-page)
+   - [Step 18: an image that opens a web page](#step-18-an-image-that-opens-a-web-page)
+   - [Step 19: the LinkedIn link](#step-19-the-linkedin-link)
 - [Use it on your own data](#use-it-on-your-own-data)
 - [Checks](#checks)
 - [Why it works this way](#why-it-works-this-way)
@@ -77,7 +80,7 @@ Want to restyle the images? They're drawn in the [Arcadia Analytics · Tableau U
 
 ### 0.2 Install the shapes
 
-Unzip `arcadia_how_to_shapes.zip`. You'll get a folder **Arcadia How-To** holding seven PNG files. Move that folder into:
+Unzip `arcadia_how_to_shapes.zip`. You'll get a folder **Arcadia How-To** holding nine PNG files. Move that folder into:
 
 - Windows: `Documents\My Tableau Repository\Shapes\`
 - Mac: `Documents/My Tableau Repository/Shapes/`
@@ -91,6 +94,7 @@ Unzip `arcadia_how_to_shapes.zip`. You'll get a folder **Arcadia How-To** holdin
 | `popover_line.png` | 1248 × 18 | The thin line under a panel's title |
 | `rail_divider.png` | 400 × 48 | The line across the rail |
 | `arcadia_logo_reverse.png` | 1200 × 326 | The logo for the rail |
+| `icon_github.png`, `icon_linkedin.png` | 56 × 56 | Link buttons (Steps 18 and 19). From Font Awesome Free, CC BY 4.0 |
 
 The images are drawn at twice their on-screen size, so they stay sharp on high-resolution screens. If Tableau was open, restart it, or click **Reload Shapes** in the shape picker, so it sees the new folder.
 
@@ -1113,9 +1117,41 @@ Dashboard **Multi-select filters**, Fixed 1400 × 850, shading `#F3F3EF`, every 
 
 Inside the rail, top to bottom: blank 24 · `arcadia_logo_reverse.png` 200 × 40 · blank 28 · ORGANIZATION 18 · blank 6 · Org Field 32 · Org Sub 18 · blank 24 · LOCATION 18 · blank 6 · Loc Field 32 · Loc Sub 18 · `rail_divider.png` 24 · Reset 32 · flexible blank · a credit line at the foot, Tableau Book 9: your name in `#E4E9F0`, then where to find the files and you in `#B9C3D1`.
 
-Inside each popover, top to bottom: the title row 44 (title and ✕) · `popover_line.png` 9 · the lists · a footer text 30, Book 9 `#8FA0B8`: "Pick functions; every department starts ticked. The last one ticked stays; a grayed one has nobody in the chosen locations."
+Inside each popover, top to bottom: the title row 44 (title and ✕) · `popover_line.png` 9 · the lists · a footer text 30, Book 9 `#8FA0B8`: "Every department starts ticked. The last one stays; gray means nobody in the chosen locations." (Location: "Every country and office starts ticked; gray means nobody in the chosen functions.") Keep footers to one line: a longer one is cut off.
 
 The popovers sit in front of everything; the rail in front of the page.
+
+---
+
+### Step 18: an image that opens a web page
+
+The last two sheets are link buttons: the same image-as-a-button idea as Step 2, with a **Go to URL** action instead of a parameter.
+
+```
+// GitHub Shape
+"icon_github"
+```
+
+Sheet **GitHub Link**: Marks **Shape**, Shape `GitHub Shape` (assign `icon_github.png` from the Arcadia How-To palette); Detail `zzTrue`, `zzFalse`; tooltip `Files and the full guide on GitHub`, command buttons off; shading None.
+
+**Dashboard > Actions > Add Action > Go to URL**: name **Open GitHub**, source sheet GitHub Link, run on **Select**, URL `https://github.com/thialp/tableau-how-to`. Add the deselect action too, so a second click works.
+
+Put it at the foot of the rail, 28 × 28, under the credit line.
+
+**You should see** the GitHub mark; a click opens the repository in a new tab.
+
+---
+
+### Step 19: the LinkedIn link
+
+```
+// LinkedIn Shape
+"icon_linkedin"
+```
+
+Sheet **LinkedIn Link**, built like GitHub Link: Shape `LinkedIn Shape` (`icon_linkedin.png`); tooltip `Thiago Alpoin on LinkedIn`; action **Open LinkedIn**, Go to URL `https://www.linkedin.com/in/thiagoalpoin`, plus its deselect. Beside the GitHub mark, 28 × 28.
+
+When you reuse the page, point both links at your own profiles.
 
 ---
 
@@ -1169,7 +1205,7 @@ Run these in Presentation mode, then again after publishing.
 |---|---|
 | `data/arcadia_employees.csv` | The data: 30,005 rows, one per employee, on Jun 30, 2026 |
 | `data/build_arcadia_employees.py` | How the file was made from the Arcadia warehouse (for transparency; you don't need it) |
-| `shapes/arcadia_how_to_shapes.zip` | The seven images, in a folder ready for `My Tableau Repository/Shapes/` |
+| `shapes/arcadia_how_to_shapes.zip` | The nine images, in a folder ready for `My Tableau Repository/Shapes/` |
 | `shapes/*.png` | The same images, one by one |
 
 ### The data, column by column
