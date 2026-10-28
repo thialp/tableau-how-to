@@ -925,7 +925,7 @@ Detail `zzTrue`, `zzFalse`; tooltip off; deselect action on each. The cards coun
 
 ### 5.2 The bar chart
 
-**Try It** from 0.5, tidied for a narrow column: title hidden; rows a fixed **18 px** high (Format > Cell size, or drag a row border), so a short list doesn't stretch into giant bars; View **Fit Width**; bar size about a third of the slider; label `<Employees>` Tableau Semibold 9 navy at the end of each bar; the Columns axis hidden; tooltip `<department_name>` / `<Employees> employees in scope`, command buttons off.
+**Try It** from 0.5, tidied for a narrow column: title hidden; rows a fixed **17 px** high (Format > Cell size, or drag a row border), so a short list doesn't stretch into giant bars and all 31 departments fit the card without a scroll bar; View **Fit Width**; bar size about a third of the slider; label `<Employees>` Tableau Semibold 9 navy at the end of each bar; the Columns axis hidden; tooltip `<department_name>` / `<Employees> employees in scope`, command buttons off.
 
 > **If the sheet shows nothing at all**, look for a red pill on the Marks card. A field that is already on Rows doesn't also need to sit on Tooltip; Tableau can mark the second copy invalid, and an invalid field blanks the whole view. Insert it into the tooltip text instead, which works because every field in the view is available there.
 
