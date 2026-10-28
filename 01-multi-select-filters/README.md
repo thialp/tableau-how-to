@@ -892,20 +892,61 @@ One button that empties every string parameter and closes every panel.
 
 ## 5. Put the page together
 
-The finished dashboard, **Multi-select filters**, Fixed 1400 × 850, shading `#F3F3EF`, every item floating:
+The point of the page is to **watch the filter work**. A popover opens over the left part of the page (x 216 to 856), so everything that changes when you click sits to its right: three number cards and a bar chart. The space under the popover holds a "Try it" card you read before you open a panel.
+
+### 5.1 The number cards
+
+```
+// People In
+SUM(IF [In Scope] THEN [One] END)
+```
+
+```
+// Depts In Scope
+COUNTD(IF [In Scope] THEN [department_name] END)
+```
+
+```
+// Offices In Scope
+COUNTD(IF [In Scope] THEN [office_name] END)
+```
+
+Give `People In` the number format **Number, 0 decimals, thousands separator**.
+
+Three sheets, each with no field on Rows or Columns, so each draws one mark. Marks **Text**, left aligned, top:
+
+| Sheet | Line 1 (Tableau Semibold 8, `#5A6170`) | Line 2 (Tableau Bold 24, navy `#13233A`) |
+|---|---|---|
+| **KPI Employees** | `EMPLOYEES` | `<People In>` |
+| **KPI Departments** | `DEPARTMENTS` | `<Depts In Scope>` then, in Book 12 `#5A6170`, ` of <N Depts>` |
+| **KPI Offices** | `OFFICES` | `<Offices In Scope>` then, in Book 12 `#5A6170`, ` of <N Offices>` |
+
+Detail `zzTrue`, `zzFalse`; tooltip off; deselect action on each. The cards count only what passes **both** filters, which is how you see the two filters respect each other.
+
+### 5.2 The bar chart
+
+**Try It** from 0.5, tidied for a narrow column: title hidden; rows a fixed **18 px** high (Format > Cell size, or drag a row border), so a short list doesn't stretch into giant bars; View **Fit Width**; bar size about a third of the slider; label `<Employees>` Tableau Semibold 9 navy at the end of each bar; the Columns axis hidden; tooltip `<department_name>` / `<Employees> employees in scope`, command buttons off.
+
+> **If the sheet shows nothing at all**, look for a red pill on the Marks card. A field that is already on Rows doesn't also need to sit on Tooltip; Tableau can mark the second copy invalid, and an invalid field blanks the whole view. Insert it into the tooltip text instead, which works because every field in the view is available there.
+
+### 5.3 The layout
+
+Dashboard **Multi-select filters**, Fixed 1400 × 850, shading `#F3F3EF`, every item floating:
 
 | Item | x | y | w | h | Notes |
 |---|---:|---:|---:|---:|---|
 | Rail (vertical container) | 0 | 0 | 216 | 850 | Navy `#13233A`, padding 8 left and right |
-| Page title (text) | 240 | 16 | 1136 | 56 | "Who works where" Tableau Bold 18 navy, then a line on what the page shows |
-| Try It | 240 | 88 | 1136 | 724 | Title hidden |
+| Page title (sheet) | 240 | 16 | 1136 | 60 | "Who works where" Tableau Bold 18 navy, then `<Page Subtitle>` |
+| Try it card (text in a white container) | 240 | 88 | 600 | 724 | The click tests of section 6, as short lines |
+| KPI Employees / Departments / Offices (each in a white container) | 872 / 1044 / 1216 | 88 | 160 | 96 | Radius 14, border 1 px `#E4E3DD`, padding 14 |
+| Chart card (white container) | 872 | 196 | 504 | 616 | Text "Employees by department" Semibold 11 navy, then Try It |
 | Footnote (text) | 240 | 826 | 1136 | 16 | "Arcadia Systems is fictional; all data is synthetic." Book 9 `#5A6170` |
 | Org Popover | 216 | 96 | 640 | 700 | Visibility `p_OrgOpen` |
 | Loc Popover | 216 | 96 | 640 | 744 | Visibility `p_LocOpen` |
 
 Inside the rail, top to bottom: blank 24 · `arcadia_logo_reverse.png` 200 × 40 · blank 28 · ORGANIZATION 18 · blank 6 · Org Field 32 · Org Sub 18 · blank 24 · LOCATION 18 · blank 6 · Loc Field 32 · Loc Sub 18 · `rail_divider.png` 24 · Reset 32 · flexible blank.
 
-Inside each popover, top to bottom: the title row 44 (title and ✕) · `popover_line.png` 9 · the lists · a footer text 30, Book 9 `#8FA0B8`: "Pick functions; every department starts ticked. The last one ticked can't be unticked; a grayed one has nobody in the chosen locations."
+Inside each popover, top to bottom: the title row 44 (title and ✕) · `popover_line.png` 9 · the lists · a footer text 30, Book 9 `#8FA0B8`: "Pick functions; every department starts ticked. The last one ticked stays; a grayed one has nobody in the chosen locations."
 
 The popovers sit in front of everything; the rail in front of the page.
 
@@ -917,16 +958,16 @@ Run these in Presentation mode, then again after publishing.
 
 | # | Do | Expect |
 |---:|---|---|
-| 1 | Nothing | Both capsules dark; "8 functions · 31 departments", "5 regions · 35 offices"; 30,005 |
+| 1 | Nothing | Both capsules dark; "8 functions · 31 departments", "5 regions · 35 offices"; cards 30,005 · 31 of 31 · 35 of 35 |
 | 2 | Click every capsule, list row, ✕ and Reset | Nothing stays highlighted |
 | 3 | Open Organization, then Location | One panel open at a time |
-| 4 | People | "People", "4 of 4 departments"; HR Business Partners 389, Talent Acquisition 388, Total Rewards 221, People Analytics 180 |
-| 5 | Untick Talent Acquisition | "3 of 4 departments"; 790 |
+| 4 | People | "People", "4 of 4 departments"; HR Business Partners 389, Talent Acquisition 388, Total Rewards 221, People Analytics 180; cards 1,178 · 4 of 31 · 34 of 35 |
+| 5 | Untick Talent Acquisition | "3 of 4 departments"; cards 790 · 3 of 31 · 34 of 35 |
 | 6 | Untick People, pick it again | All four ticked: the clean-up worked |
-| 7 | Legal & Compliance only, untick Legal | Compliance & Risk gray; a click changes nothing; 498 |
-| 8 | Reset, then Asia Pacific, untick Pune | "6 countries · 8 of 9 offices"; 8,527 |
-| 9 | Add People without Talent Acquisition | 143 |
-| 10 | Reset, Middle East & Africa, untick South Africa, open Organization | 282; Analytics Engineering and People Analytics grayed |
+| 7 | Legal & Compliance only, untick Legal | Compliance & Risk gray; a click changes nothing; cards 498 · 1 of 31 · 32 of 35 |
+| 8 | Reset, then Asia Pacific, untick Pune | "6 countries · 8 of 9 offices"; cards 8,527 · 31 of 31 · 8 of 35 |
+| 9 | Add People without Talent Acquisition | cards 143 · 3 of 31 · 7 of 35 |
+| 10 | Reset, Middle East & Africa, untick South Africa, open Organization | cards 282 · 29 of 31 · 1 of 35; Analytics Engineering and People Analytics grayed |
 | 11 | Reset, Finance, then Location > Europe | Portugal and Lisbon grayed |
 | 12 | Reset | Everything as in check 1 |
 
