@@ -321,7 +321,7 @@ Why the ticks are all empty at the start: with nothing chosen, every function is
 2. New sheet **Function List**:
    - Rows `function_name` (header hidden: right-click > untick **Show Header**). Columns `Tick X`; right-click the axis > Edit Axis: Fixed **0 to 10**; then untick **Show Header**.
    - Marks **Shape**, Shape `Function Shape`: assign `tick_on.png` to `tick_on` and `tick_off.png` to `tick_off` (palette Arcadia How-To). Size: one step left of the middle of the slider; keep this size on every list.
-   - Label: type two spaces, then insert `function_name`: `  <function_name>`. Tableau Book 9.5, `#E4E9F0`; alignment left, middle. Under Label, tick **Allow labels to overlap other marks**.
+   - Label: type two spaces, then insert `function_name`: `  <function_name>`. Tableau Book 10, `#E4E9F0`; alignment left, middle. Under Label, tick **Allow labels to overlap other marks**.
    - Detail `Function Pick`, `zzTrue`, `zzFalse`.
    - Format: shading None, row and column dividers None, grid lines None, zero lines None. Fit **Entire View**. Tooltip off (Tooltip > untick **Show tooltips**).
 3. On your dashboard, put **Function List** inside **Org Popover**, under the title, width 200.
