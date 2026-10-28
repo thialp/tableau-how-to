@@ -188,7 +188,7 @@ FALSE
 1. Create a new dashboard, **Step 2**, size **Fixed 1400 × 850**. Shading `#F3F3EF`.
 2. Drag a **Vertical** container onto the dashboard, **floating**: x 0, y 0, w 216, h 850. Background navy `#13233A`. This is the rail.
 3. Drag **Org Field** into the rail. Hide its title. Fixed height 32.
-4. Drag another **Vertical** container, floating, to x 216, y 140, w 640, h 700. Background `#13233A`, no border. Name it **Org Popover** (Layout pane > Item hierarchy, double-click the name).
+4. Drag another **Vertical** container, floating, to x 216, y 96, w 640, h 700. Its top lines up with the ORGANIZATION heading in the rail. Background `#13233A`, no border. Name it **Org Popover** (Layout pane > Item hierarchy, double-click the name).
 5. Into **Org Popover** drag a **Text** object: `Organization`, Tableau Bold 12, white. Fixed height 44. This is the panel's title; Step 3 adds the ✕ beside it.
 6. Select **Org Popover**. In the Layout pane tick **Control visibility using value**, and pick **Parameters > p_OrgOpen**.
 7. **Dashboard > Actions > Add Action > Change Parameter**:
@@ -736,7 +736,7 @@ MIN({ FIXED : SUM(IF [Dept In] AND [Office In] THEN [One] END) })
 
 Sheets: **Loc Field**, **Loc Sub**, **Loc Close**, **Region List** (Rows `region`), **Country List** (Filter `Country Visible` = True; Rows `Country Key`, header hidden; label `  <country_name>`), **Office List** (Filter `Office Visible` = True; Rows `Office Key`, header hidden; label `  <ATTR(country_name)> · <office_name>`, the country in `#8FA0B8`), each built like its Organization twin. Locked names use the two-run label of Step 7.
 
-Popover **Loc Popover**: floating at x 216, y 130, w 640, h 720, visibility `p_LocOpen`; Region List 160, Country List 200, Office List 240.
+Popover **Loc Popover**: floating at x 216, y 96, w 640, h 744 (the same top as Organization, down to the foot of the page, so all 35 offices fit without a scroll bar), visibility `p_LocOpen`; Region List 170, Country List 190, Office List 280.
 
 Actions (plus a deselect on every one of these sheets):
 
@@ -900,8 +900,8 @@ The finished dashboard, **Multi-select filters**, Fixed 1400 × 850, shading `#F
 | Page title (text) | 240 | 16 | 1136 | 56 | "Who works where" Tableau Bold 18 navy, then a line on what the page shows |
 | Try It | 240 | 88 | 1136 | 724 | Title hidden |
 | Footnote (text) | 240 | 826 | 1136 | 16 | "Arcadia Systems is fictional; all data is synthetic." Book 9 `#5A6170` |
-| Org Popover | 216 | 140 | 640 | 700 | Visibility `p_OrgOpen` |
-| Loc Popover | 216 | 130 | 640 | 720 | Visibility `p_LocOpen` |
+| Org Popover | 216 | 96 | 640 | 700 | Visibility `p_OrgOpen` |
+| Loc Popover | 216 | 96 | 640 | 744 | Visibility `p_LocOpen` |
 
 Inside the rail, top to bottom: blank 24 · `arcadia_logo_reverse.png` 200 × 40 · blank 28 · ORGANIZATION 18 · blank 6 · Org Field 32 · Org Sub 18 · blank 24 · LOCATION 18 · blank 6 · Loc Field 32 · Loc Sub 18 · `rail_divider.png` 24 · Reset 32 · flexible blank.
 
