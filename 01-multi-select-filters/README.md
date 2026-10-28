@@ -77,15 +77,14 @@ Want to restyle the images? They're drawn in the [Arcadia Analytics · Tableau U
 
 ### 0.2 Install the shapes
 
-Unzip `arcadia_how_to_shapes.zip`. You'll get a folder **Arcadia How-To** holding eight PNG files. Move that folder into:
+Unzip `arcadia_how_to_shapes.zip`. You'll get a folder **Arcadia How-To** holding seven PNG files. Move that folder into:
 
 - Windows: `Documents\My Tableau Repository\Shapes\`
 - Mac: `Documents/My Tableau Repository/Shapes/`
 
 | File | Size (px) | What it draws |
 |---|---|---|
-| `capsule_dark.png` | 600 × 96 | The rail button when nothing is chosen ("All functions") |
-| `capsule_light.png` | 600 × 96 | The rail button when a choice is on |
+| `capsule_dark.png` | 600 × 96 | The rail button |
 | `tick_on.png` | 36 × 36 | A ticked box (teal, white tick) |
 | `tick_off.png` | 36 × 36 | An empty box |
 | `reset_button.png` | 600 × 96 | "Reset to default view" (Step 13) |
@@ -185,7 +184,7 @@ FALSE
 "All functions"
 ```
 
-`Org Capsule Shape` and `Org Field Text` are placeholders: Step 6 makes them follow the selection.
+`Org Field Text` is a placeholder: Step 6 makes it follow the selection. `Org Capsule Shape` stays as it is; the capsule is the same navy picture whatever you pick, and the text on it does the talking.
 
 3. New sheet, name it **Org Field**.
    - Marks type **Shape**. Drag `Org Capsule Shape` to Shape. Click **Shape**, pick the palette **Arcadia How-To**, and assign `capsule_dark.png` to the value `capsule_dark`.
@@ -501,7 +500,7 @@ On **Dept List**, replace the label with two runs on one line: `  <Dept Name On>
 
 ### Step 6: make the capsule talk
 
-**Why.** "All functions" should change to say what you picked, and the capsule should turn white so it's obvious a filter is on.
+**Why.** "All functions" should change to say what you picked, and the line under the capsule should say how much of the organization is in.
 
 **Do.**
 
@@ -544,7 +543,7 @@ On **Dept List**, replace the label with two runs on one line: `  <Dept Name On>
 
 The curly braces with nothing before the colon are a FIXED level of detail over the whole data source, written short. They give one number however the sheet is built.
 
-2. Edit the two placeholders from Step 2, and add the text fields:
+2. Edit the placeholder from Step 2, and add the sub-line:
 
 ```
 // Org Field Text
@@ -554,27 +553,12 @@ ELSE STR([N Functions In]) + " functions" END
 ```
 
 ```
-// Org Capsule Shape
-IF [Org Is All] THEN "capsule_dark" ELSE "capsule_light" END
-```
-
-```
-// Org Text Light
-IF NOT [Org Is All] THEN [Org Field Text] END
-```
-
-```
-// Org Text Dark
-IF [Org Is All] THEN [Org Field Text] END
-```
-
-```
 // Org Sub Text
 IF [Org Is All] THEN STR([N Functions]) + " functions · " + STR([N Depts]) + " departments"
 ELSE STR([N Depts In]) + " of " + STR([N Depts Offered]) + " departments" END
 ```
 
-3. On **Org Field**: Shape > assign `capsule_light.png` to `capsule_light`. Replace the label with two runs: `<Org Text Light>` Tableau Semibold 9 navy `#13233A`, then `<Org Text Dark>` Tableau Medium 9 `#E4E9F0`. On the white capsule the text is dark; on the dark capsule it's light.
+3. On **Org Field**, the label `<Org Field Text>` (Tableau Medium 9, `#E4E9F0`) now follows the selection by itself.
 4. New sheet **Org Sub**: Marks Text, `<Org Sub Text>` Tableau Book 9 `#8A97A8`, left. Detail `zzTrue`, `zzFalse`; tooltip off; deselect action. Put it in the rail under Org Field, height 18.
 5. Put a text object `ORGANIZATION` (Tableau Semibold 8, `#B8C4D6`) above the capsule.
 
@@ -582,10 +566,10 @@ ELSE STR([N Depts In]) + " of " + STR([N Depts Offered]) + " departments" END
 
 | You pick | Capsule | Under it |
 |---|---|---|
-| Nothing | Dark, "All functions" | 8 functions · 31 departments |
-| People | White, "People" | 4 of 4 departments |
-| People, Talent Acquisition unticked | White, "People" | 3 of 4 departments |
-| People and Finance | White, "2 functions" | 7 of 7 departments |
+| Nothing | "All functions" | 8 functions · 31 departments |
+| People | "People" | 4 of 4 departments |
+| People, Talent Acquisition unticked | "People" | 3 of 4 departments |
+| People and Finance | "2 functions" | 7 of 7 departments |
 
 ---
 
@@ -735,13 +719,7 @@ ELSEIF [N Regions In] = 1 THEN [One Region]
 ELSE STR([N Regions In]) + " regions" END
 
 // Loc Capsule Shape
-IF [Loc Is All] THEN "capsule_dark" ELSE "capsule_light" END
-
-// Loc Text Light
-IF NOT [Loc Is All] THEN [Loc Field Text] END
-
-// Loc Text Dark
-IF [Loc Is All] THEN [Loc Field Text] END
+"capsule_dark"
 
 // Loc Sub Text
 IF [Loc Is All] THEN STR([N Regions]) + " regions · " + STR([N Offices]) + " offices"
@@ -785,9 +763,9 @@ Actions (plus a deselect on every one of these sheets):
 
 | You pick | Capsule | Under it | Try It total |
 |---|---|---|---|
-| Nothing | Dark, "All locations" | 5 regions · 35 offices | 30,005 |
-| Asia Pacific | White, "Asia Pacific" | 6 countries · 9 of 9 offices | 9,005 |
-| Asia Pacific, Pune unticked | White, "Asia Pacific" | 6 countries · 8 of 9 offices | 8,527 |
+| Nothing | "All locations" | 5 regions · 35 offices | 30,005 |
+| Asia Pacific | "Asia Pacific" | 6 countries · 9 of 9 offices | 9,005 |
+| Asia Pacific, Pune unticked | "Asia Pacific" | 6 countries · 8 of 9 offices | 8,527 |
 | That, plus People without Talent Acquisition | | | 143 |
 
 To read the total on Try It, turn on **Analysis > Totals > Show Column Grand Totals**.
@@ -1114,7 +1092,7 @@ END
 
 No year is typed anywhere: the date comes from the data, so a newer file updates the title on its own.
 
-Sheet **Title**: Marks **Text**, line 1 `Who works where` Tableau Bold 18 navy, line 2 `<Page Subtitle>` Tableau Book 11 `#5A6170`; left, top. Detail `zzTrue`, `zzFalse`; tooltip off; a deselect action.
+Sheet **Title**: Marks **Text**, three lines, left, top: `HOW-TO · STEP-BY-STEP LESSON` Tableau Semibold 9 teal `#0F6E56`; `How to build multi-select filters from shapes` Tableau Bold 18 navy; `<Page Subtitle>` Tableau Book 11 `#5A6170`. The first two lines say what the page is before anyone reads a number: a lesson, not an analysis. Detail `zzTrue`, `zzFalse`; tooltip off; a deselect action.
 
 **You should see** "Employees on Jun 30, 2026 · all of Arcadia Systems". Pick People and Asia Pacific, untick Pune: "People in Asia Pacific (8 offices)".
 
@@ -1133,7 +1111,7 @@ Dashboard **Multi-select filters**, Fixed 1400 × 850, shading `#F3F3EF`, every 
 | Org Popover | 216 | 96 | 640 | 700 | Visibility `p_OrgOpen` |
 | Loc Popover | 216 | 96 | 640 | 744 | Visibility `p_LocOpen` |
 
-Inside the rail, top to bottom: blank 24 · `arcadia_logo_reverse.png` 200 × 40 · blank 28 · ORGANIZATION 18 · blank 6 · Org Field 32 · Org Sub 18 · blank 24 · LOCATION 18 · blank 6 · Loc Field 32 · Loc Sub 18 · `rail_divider.png` 24 · Reset 32 · flexible blank.
+Inside the rail, top to bottom: blank 24 · `arcadia_logo_reverse.png` 200 × 40 · blank 28 · ORGANIZATION 18 · blank 6 · Org Field 32 · Org Sub 18 · blank 24 · LOCATION 18 · blank 6 · Loc Field 32 · Loc Sub 18 · `rail_divider.png` 24 · Reset 32 · flexible blank · a credit line at the foot, Tableau Book 9: your name in `#E4E9F0`, then where to find the files and you in `#B9C3D1`.
 
 Inside each popover, top to bottom: the title row 44 (title and ✕) · `popover_line.png` 9 · the lists · a footer text 30, Book 9 `#8FA0B8`: "Pick functions; every department starts ticked. The last one ticked stays; a grayed one has nobody in the chosen locations."
 
@@ -1160,7 +1138,7 @@ Run these in Presentation mode, then again after publishing.
 
 | # | Do | Expect |
 |---:|---|---|
-| 1 | Nothing | Both capsules dark; "8 functions · 31 departments", "5 regions · 35 offices"; cards 30,005 · 31 of 31 · 35 of 35 |
+| 1 | Nothing | Capsules read "All functions" and "All locations"; "8 functions · 31 departments", "5 regions · 35 offices"; cards 30,005 · 31 of 31 · 35 of 35 |
 | 2 | Click every capsule, list row, ✕ and Reset | Nothing stays highlighted |
 | 3 | Open Organization, then Location | One panel open at a time |
 | 4 | People | "People", "4 of 4 departments"; HR Business Partners 389, Talent Acquisition 388, Total Rewards 221, People Analytics 180; cards 1,178 · 4 of 31 · 34 of 35 |
@@ -1191,7 +1169,7 @@ Run these in Presentation mode, then again after publishing.
 |---|---|
 | `data/arcadia_employees.csv` | The data: 30,005 rows, one per employee, on Jun 30, 2026 |
 | `data/build_arcadia_employees.py` | How the file was made from the Arcadia warehouse (for transparency; you don't need it) |
-| `shapes/arcadia_how_to_shapes.zip` | The eight images, in a folder ready for `My Tableau Repository/Shapes/` |
+| `shapes/arcadia_how_to_shapes.zip` | The seven images, in a folder ready for `My Tableau Repository/Shapes/` |
 | `shapes/*.png` | The same images, one by one |
 
 ### The data, column by column
