@@ -309,8 +309,10 @@ IF [p_Functions] <> "" AND MIN([Function In]) THEN "tick_on" ELSE "tick_off" END
 
 ```
 // Tick X
-MIN(0)
+MIN(0.6)
 ```
+
+`Tick X` puts every box at the same spot near the left of a 0-to-10 axis, a little in from the edge so the box isn't cut in half.
 
 Reading `Function Toggle` for People: if `|People|` is in the string, remove it (and if it was the only one, leave the string empty); otherwise append it. `Function Pick` wraps it in `MIN()` so the action has one value per mark.
 
@@ -399,7 +401,9 @@ Worked example, with `p_DeptOff` = `|People>Talent Acquisition|Finance>FP&A|`: a
 
 3. New sheet **Dept List**, built like Function List:
    - Filter `Dept Visible` = True. (This filter is fine: it hides departments of unpicked functions, which is what the panel should do.)
-   - Rows `function_name` then `department_name`. Show the `function_name` header as a small group heading (Book 8.5, `#8FA0B8`) and hide the `department_name` header. Columns `Tick X`, Fixed 0 to 10, hidden.
+   - Rows `Dept Key`, header hidden. Because the key starts with the function, the departments come out sorted by function, so each function's departments sit together. Columns `Tick X`, Fixed 0 to 10, hidden.
+
+     Why not `function_name` then `department_name` as two row headers? A group with a single row loses its heading in Tableau, so in Location (Step 9), every country with one office would show a blank. One flat list, sorted by its key, avoids that everywhere.
    - Shape `Dept Shape` (`tick_on`, `tick_off`); Label `  <department_name>`; Detail `Dept Pick`, `zzTrue`, `zzFalse`.
    - Same format and tooltip-off as Function List.
 4. Put **Dept List** in **Org Popover** to the right of Function List (width 420). Actions:
@@ -562,7 +566,7 @@ ELSE STR([N Depts In]) + " of " + STR([N Depts Offered]) + " departments" END
 
 ### Step 9: your turn, Location
 
-Build the Location filter yourself, with the same pattern one level deeper: **region > country > office**. Use the hints first; the full answer is below them, and every answer sheet is in the downloadable workbook, named `Answer · …`.
+Build the Location filter yourself, with the same pattern one level deeper: **region > country > office**. Use the hints first; the full answer is below them, and the finished Location sheets are in the downloadable workbook (Loc Field, Region List, Country List, Office List and the rest), so you can open them and compare.
 
 **Hints**
 
@@ -730,7 +734,7 @@ SUM(IF [Dept In] AND [Office In] THEN [One] END)
 MIN({ FIXED : SUM(IF [Dept In] AND [Office In] THEN [One] END) })
 ```
 
-Sheets: **Loc Field**, **Loc Sub**, **Loc Close**, **Region List** (Rows `region`), **Country List** (Filter `Country Visible` = True; Rows `region` as heading, `country_name`), **Office List** (Filter `Office Visible` = True; Rows `country_name` as heading, `office_name`), each built like its Organization twin. Locked names use the two-run label of Step 7.
+Sheets: **Loc Field**, **Loc Sub**, **Loc Close**, **Region List** (Rows `region`), **Country List** (Filter `Country Visible` = True; Rows `Country Key`, header hidden; label `  <country_name>`), **Office List** (Filter `Office Visible` = True; Rows `Office Key`, header hidden; label `  <ATTR(country_name)> · <office_name>`, the country in `#8FA0B8`), each built like its Organization twin. Locked names use the two-run label of Step 7.
 
 Popover **Loc Popover**: floating at x 216, y 130, w 640, h 720, visibility `p_LocOpen`; Region List 160, Country List 200, Office List 240.
 
