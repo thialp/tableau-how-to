@@ -300,10 +300,10 @@ ELSE "Month" END
 ```
 // Span Hint
 CASE [Span No]
-WHEN 1 THEN "12 months to the date"
-WHEN 2 THEN "From Jul 1 to the date"
+WHEN 1 THEN "12 months back"
+WHEN 2 THEN "From Jul 1"
 WHEN 3 THEN "From the quarter's start"
-ELSE "From the 1st of the month" END
+ELSE "From the 1st" END
 ```
 
 ```
@@ -349,7 +349,7 @@ How `Span No` reads: `(MONTH + 5) % 12` turns July into 0 and June into 11, the 
 
 **Why.** The report date is where every period ends. Most of the time people want **today**, with the period so far ("year to date"); sometimes they want a closed month-end, to see a finished month, quarter or year. So the grid offers today, and the closed month-ends before it.
 
-A grid of bare month names asks people to imagine what a click will do. So every cell describes its own window, in the words of the span you picked: with Year picked, the cell for June 2026 reads "Jun 25 to Jun 26"; with Year to date, "FY26 · Jul to Jun"; with Month, "Jun 2026". Today's cell reads "Jul 5, 25 to Jul 5, 26", "FY27 · Jul 1 to Jul 5" or "Jul 1 to Jul 5, 2026". Today sits alone in the top row, and each column below it is one fiscal year, newest first. A year, a year to date or a quarter is offered at each quarter-end; a month at every month-end.
+A grid of bare month names asks people to imagine what a click will do. So every cell describes its own window, in the words of the span you picked: with Year picked, the cell for June 2026 reads "Jun 25 to Jun 26"; with Year to date, "FY26 · Jul to Jun"; with Month, "Jun 2026". Today's cell reads "Jul 5, 25 to Jul 5, 26", "FY27 · Jul 1–5" or "Jul 1–5, 2026". Today sits alone in the top row, and each column below it is one fiscal year, newest first. A year, a year to date or a quarter is offered at each quarter-end; a month at every month-end.
 
 Storing the report date as a date would mean typing a year into the parameter, and a year typed today is wrong next year. So the parameter stores **how many months back from the latest month**: 0 is the latest month, which ends today (Jul 5, 2026); 1 is the month-end before it (Jun 30, 2026); 4 is Mar 31. When a new day arrives in the data, 0 moves with it, and so does everything built on it.
 
@@ -440,12 +440,14 @@ WHEN "Year" THEN (IF [Cell Is Today]
          + " to " + [Cell Mon] + " " + STR(DAY([Cell Close])) + ", " + RIGHT(STR(YEAR([Cell Close])), 2)
     ELSE [Cell Mon] + " " + RIGHT(STR(YEAR([Cell Close]) - 1), 2) + " to " + [Cell Mon] + " " + RIGHT(STR(YEAR([Cell Close])), 2) END)
 WHEN "Year to date" THEN [Cell FY] + " · "
-    + (IF [Cell Is Today] THEN "Jul 1 to " + [Cell Mon] + " " + STR(DAY([Cell Close]))
+    + (IF [Cell Is Today] AND MONTH([Cell Close]) = 7 THEN "Jul 1–" + STR(DAY([Cell Close]))
+       ELSEIF [Cell Is Today] THEN "Jul 1 to " + [Cell Mon] + " " + STR(DAY([Cell Close]))
        ELSEIF MONTH([Cell Close]) = 7 THEN "Jul" ELSE "Jul to " + [Cell Mon] END)
 WHEN "Quarter" THEN [Cell FY] + " Q" + STR(INT(((MONTH([Cell Close]) + 5) % 12) / 3) + 1) + " · "
     + LEFT(DATENAME('month', DATEADD('month', -((MONTH([Cell Close]) - 1) % 3), [Cell Close])), 3)
-    + (IF [Cell Is Today] THEN " 1 to " + [Cell Mon] + " " + STR(DAY([Cell Close])) ELSE " to " + [Cell Mon] END)
-ELSE (IF [Cell Is Today] THEN [Cell Mon] + " 1 to " + [Cell Mon] + " " + STR(DAY([Cell Close])) + ", " + STR(YEAR([Cell Close]))
+    + (IF [Cell Is Today] AND (MONTH([Cell Close]) - 1) % 3 = 0 THEN " 1–" + STR(DAY([Cell Close]))
+       ELSEIF [Cell Is Today] THEN " 1 to " + [Cell Mon] + " " + STR(DAY([Cell Close])) ELSE " to " + [Cell Mon] END)
+ELSE (IF [Cell Is Today] THEN [Cell Mon] + " 1–" + STR(DAY([Cell Close])) + ", " + STR(YEAR([Cell Close]))
       ELSE [Cell Mon] + " " + STR(YEAR([Cell Close])) END) END
 ```
 
@@ -505,7 +507,7 @@ ELSE 4 - INT(((MONTH([Cell Close]) + 5) % 12) / 3) END
    | Pick month | Change Parameter | Month Grid | p_Back | Month Pick (aggregation None) |
    | Deselect Month Grid | Filter | Month Grid | Month Grid | `zzTrue` → `zzFalse` |
 
-**You should see**, with Year picked: "Jun 25 to Jun 26" in teal, the top cell of the first column. With Year to date picked: "FY27 · Jul 1 to Jul 5" at the top, then three columns, FY26 to FY24, with four cells each: "FY26 · Jul to Jun", "FY26 · Jul to Mar", "FY26 · Jul to Dec", "FY26 · Jul to Sep", and so on. Pick Year and the same cells read "Jul 5, 25 to Jul 5, 26", "Jun 25 to Jun 26", "Mar 25 to Mar 26"... Pick Month and every month-end appears: twelve rows under today. Click today's cell: `p_Back` is 0. Click "Jun 25 to Jun 26": `p_Back` is 1, the same window the page opened on.
+**You should see**, with Year picked: "Jun 25 to Jun 26" in teal, the top cell of the first column. With Year to date picked: "FY27 · Jul 1–5" at the top, then three columns, FY26 to FY24, with four cells each: "FY26 · Jul to Jun", "FY26 · Jul to Mar", "FY26 · Jul to Dec", "FY26 · Jul to Sep", and so on. Pick Year and the same cells read "Jul 5, 25 to Jul 5, 26", "Jun 25 to Jun 26", "Mar 25 to Mar 26"... Pick Month and every month-end appears: twelve rows under today. Click today's cell: `p_Back` is 0. Click "Jun 25 to Jun 26": `p_Back` is 1, the same window the page opened on.
 
 ---
 
@@ -936,7 +938,8 @@ SUM(IF [In Comparison] THEN [employees] END) / MIN([Days Before])
 **Hints**
 
 - One more string parameter, `p_Basis`, current value `Last year`.
-- `Shift` becomes 3 for a quarter and 1 for a month when `p_Basis` is "Prior period", and stays 12 otherwise. For a year and year to date, the prior period **is** last year, so there the toggle shows Last year as chosen and grays out Prior period, and its tooltip says why. A button that does nothing without saying so looks broken.
+- `Shift` becomes 3 for a quarter and 1 for a month when `p_Basis` is "Prior period", and stays 12 otherwise.
+- Read the rail top to bottom: what you compare with decides which spans make sense. Compared with the prior period, a year **is** last year, so Prior period grays out Year and Year to date in the span list. And a click on Prior period while a year is picked moves the span to Quarter in the same click, so the click always changes something (Step 12). A button that does nothing without saying so looks broken.
 - The to-date rule from Step 6 still applies: Jul 5 against the prior quarter is Apr 5, the same day three months back.
 - Each half of the toggle is an image button like the capsule in Step 2: a one-mark sheet whose shape depends on `p_Basis`, with a click that writes its own value into `p_Basis`.
 - Text on a chosen half is navy on a pale background; on the other half, pale on navy. Two label runs, one of them always empty, give each half the right color (the same trick as a two-color label anywhere).
@@ -955,17 +958,14 @@ ELSE 12 END
 // Basis Year Value
 "Last year"
 
-// Basis Is Fixed
-[p_Span] = "Year" OR [p_Span] = "Year to date"
-
 // Basis Year Shape
-IF [p_Basis] = "Last year" OR [Basis Is Fixed] THEN "seg_left_on" ELSE "seg_left_off" END
+IF [p_Basis] = "Last year" THEN "seg_left_on" ELSE "seg_left_off" END
 
 // Basis Year On
-IF [p_Basis] = "Last year" OR [Basis Is Fixed] THEN "Last year" END
+IF [p_Basis] = "Last year" THEN "Last year" END
 
 // Basis Year Off
-IF [p_Basis] <> "Last year" AND NOT [Basis Is Fixed] THEN "Last year" END
+IF [p_Basis] <> "Last year" THEN "Last year" END
 ```
 
 Sheet **Basis Year**: Marks **Shape**, Shape `Basis Year Shape` (assign `seg_left_on.png` to `seg_left_on` and `seg_left_off.png` to `seg_left_off`). Label `<Basis Year On><Basis Year Off>`, the first run Tableau Semibold 9 navy `#13233A`, the second Tableau Book 9 `#E4E9F0`, centered. Detail `Basis Year Value`, `zzTrue`, `zzFalse`. Tooltip `Compare with the same period last year`, command buttons off.
@@ -991,27 +991,66 @@ Sheet **Basis Prior**, the mirror of Basis Year:
 
 ```
 // Basis Prior Shape
-IF [p_Basis] = "Prior period" AND NOT [Basis Is Fixed] THEN "seg_right_on" ELSE "seg_right_off" END
+IF [p_Basis] = "Prior period" THEN "seg_right_on" ELSE "seg_right_off" END
 ```
 
 ```
 // Basis Prior On
-IF [p_Basis] = "Prior period" AND NOT [Basis Is Fixed] THEN "Prior period" END
+IF [p_Basis] = "Prior period" THEN "Prior period" END
 ```
 
 ```
 // Basis Prior Off
-IF [p_Basis] <> "Prior period" AND NOT [Basis Is Fixed] THEN "Prior period" END
+IF [p_Basis] <> "Prior period" THEN "Prior period" END
 ```
 
 ```
-// Basis Prior Dim
-IF [Basis Is Fixed] THEN "Prior period" END
+// Basis Prior Span
+IF [p_Span] = "Year" OR [p_Span] = "Year to date" THEN "Quarter" ELSE [p_Span] END
 ```
 
-Shape `Basis Prior Shape` (`seg_right_on.png`, `seg_right_off.png`); label `<Basis Prior On><Basis Prior Off><Basis Prior Dim>`: navy Semibold 9, `#E4E9F0` Book 9, and `#4F6178` Book 9 for the grayed state; Detail `Basis Prior Value`, `zzTrue`, `zzFalse`. Tooltip, two lines: `Compare with the period just before, to the same day` Tableau Semibold 10; `For a year and year to date, the prior period is last year: pick Quarter or Month to use it.` Tableau Book 9. Command buttons off. Put it in the toggle's container on the right, width 100.
+Shape `Basis Prior Shape` (`seg_right_on.png`, `seg_right_off.png`); label `<Basis Prior On><Basis Prior Off>` with the same two colors; Detail `Basis Prior Value`, `Basis Prior Span`, `zzTrue`, `zzFalse`. Tooltip, two lines: `Compare with the period just before, to the same day` Tableau Semibold 10; `A quarter with the quarter before, a month with the month before. A year picked now becomes a quarter.` Tableau Book 9. Command buttons off. Put it in the toggle's container on the right, width 100.
 
-Action: **Basis to prior period** (Change Parameter, Basis Prior, `p_Basis` ← `Basis Prior Value`), plus its deselect.
+Two actions on one click, plus the deselect:
+
+| Name | Source | Target | Field |
+|---|---|---|---|
+| Basis to prior period | Basis Prior | p_Basis | Basis Prior Value |
+| Prior period moves the span | Basis Prior | p_Span | Basis Prior Span |
+
+`Basis Prior Span` keeps a quarter or a month as it is and turns a year or a year to date into a quarter. Both actions run on the same click, so the toggle never looks dead.
+
+#### Gray out the spans that don't fit
+
+Compared with the prior period, a year is last year anyway. So while Prior period is on, Year and Year to date gray out in the span list, a click on them changes nothing, and their tooltip says how to get them back. Back in Step 4's fields, create and edit:
+
+```
+// Span Dim
+MIN([Span No]) <= 2 AND [p_Basis] = "Prior period"
+```
+
+```
+// Span Pick
+IF [Span Dim] THEN [p_Span] ELSE MIN([Span Option]) END
+```
+
+```
+// Span On
+IF NOT [Span Dim] THEN MIN([Span Option]) END
+```
+
+```
+// Span Dimmed
+IF [Span Dim] THEN MIN([Span Option]) END
+```
+
+```
+// Span Tip
+IF [Span Dim] THEN "Compared with the prior period, a year is last year: pick Last year under COMPARED WITH to use it."
+ELSE MIN([Span Hint]) + ". Click to pick it; the cards and the line follow." END
+```
+
+On **Span List**, the label becomes `  <Span On><Span Dimmed>   <Span Hint>`: `#E4E9F0`, `#4F6178` and `#8FA0B8`; the tooltip `<Span Option>` Semibold, then `<Span Tip>`. A dimmed option writes back the span that's already picked, the same guard as a locked option in How-To #1.
 
 **You should see**
 
@@ -1021,7 +1060,7 @@ Action: **Basis to prior period** (Change Parameter, Basis Prior, `p_Basis` ← 
 | Month, today, Prior period | "Jul 1–5, 2026" | vs Jun 1–5, 2026 | 30,041 vs 29,889 · +0.5% | +36 vs +15 |
 | Quarter, Jun 2026, Prior period | "FY26 Q4" | vs FY26 Q3 | 30,005 vs 29,618 · +1.3% | +387 vs +397 |
 | Month, Jun 2026, Prior period | "Jun 2026" | vs May 2026 | 30,005 vs 29,874 · +0.4% | +131 vs +118 |
-| Year or Year to date, Prior period | unchanged | unchanged | Prior period grayed, Last year shown as chosen | |
+| Year, Jun 2026, then Prior period | "FY26 Q4" (the span moves to Quarter) | vs FY26 Q3 | 30,005 vs 29,618 · +1.3% | +387 vs +397; Year and Year to date grayed |
 
 With Prior period, the two bands on Try It sit close together instead of a year apart.
 
@@ -1128,7 +1167,7 @@ Dashboard **Period selection**, Fixed 1400 × 850, shading `#F3F3EF`, every item
 
 Inside the rail, top to bottom: blank 24 · `arcadia_logo_reverse.png` 160 × 40 · blank 32 · PERIOD 18 · blank 4 · Period Field 32 · blank 4 · Period Sub 20 · blank 24 · COMPARED WITH 18 · blank 4 · the toggle 32 (Basis Year, Basis Prior) · blank 6 · Basis Sub 36 · blank 12 · `rail_divider.png` 24 · blank 8 · Reset 32 · flexible blank · a credit line at the foot, Tableau Book 9: your name in `#E4E9F0`, then "Files and guide on GitHub" in `#B9C3D1`.
 
-Inside the popover, top to bottom: the title row 44 (title and ✕) · `popover_line.png` · two columns, each with a small heading (Tableau Semibold 8, `#8FA0B8`): `SPAN` over Span List (230 wide) and `REPORT DATE` over Month Grid (390 wide) · a footer text 30, Book 9 `#8FA0B8`: "Every period ends on the report date: today, or a closed month-end." Keep the footer to one line: a longer one is cut off.
+Inside the popover, top to bottom: the title row 44 (title and ✕) · `popover_line.png` · two columns, each with a small heading (Tableau Semibold 8, `#8FA0B8`): `SPAN` over Span List (220 wide) and `REPORT DATE` over Month Grid, with a column divider between them (a **Blank** object, width 1, background `#2B3D57`, the same color as the line under the title, and 12 px of space on each side) · a footer text 30, Book 9 `#8FA0B8`: "Every period ends on the report date: today, or a closed month-end." Keep the footer to one line: a longer one is cut off.
 
 The popover sits in front of everything; the rail in front of the page. The cards and the chart sit right of x 856, so they stay in view while the panel is open.
 
@@ -1151,19 +1190,20 @@ Run these in Presentation mode, then again after publishing.
 
 | # | Do | Expect |
 |---:|---|---|
-| 1 | Nothing | Subtitle "A simulation: **today is July 5, 2026**, and **the fiscal year runs from July 1 to June 30** · FY26 compared with FY25"; capsule "FY26", ■ Jul 2025 – Jun 2026; under the toggle ■ vs FY25; Year ticked; "Jun 25 to Jun 26" teal; Last year chosen, Prior period grayed; cards 30,005 · vs 28,438 · +5.5% / +1,567 vs +1,230 / 29,224 · vs 27,824 · +5.0% |
+| 1 | Nothing | Subtitle "A simulation: **today is July 5, 2026**, and **the fiscal year runs from July 1 to June 30** · FY26 compared with FY25"; capsule "FY26", ■ Jul 2025 – Jun 2026; under the toggle ■ vs FY25; Year ticked; "Jun 25 to Jun 26" teal; Last year chosen; cards 30,005 · vs 28,438 · +5.5% / +1,567 vs +1,230 / 29,224 · vs 27,824 · +5.0% |
 | 2 | Click the capsule, every list row, grid cell, toggle half, ✕ and Reset; hover each card, a grid cell and the line | Nothing stays highlighted; every tooltip names its dates, with the period in green and the comparison in sand |
 | 3 | Year to date, Quarter, Month | The end card doesn't move; growth +1,567 / +387 / +131 against +1,230 / +301 / +104 |
-| 4 | Quarter, Prior period | "vs FY26 Q3"; 30,005 · vs 29,618 · +1.3%; growth +387 vs +397; Prior period now active |
-| 5 | Today's cell ("FY27 Q1 · Jul 1 to Jul 5") | "vs FY26 Q4 to Apr 5"; 30,041 · vs 29,653 · +1.3%; growth +36 vs +35 |
+| 4 | Year, then Prior period | The span moves to Quarter: "FY26 Q4", "vs FY26 Q3"; 30,005 · vs 29,618 · +1.3%; growth +387 vs +397; Year and Year to date grayed |
+| 5 | Today's cell ("FY27 Q1 · Jul 1–5") | "vs FY26 Q4 to Apr 5"; 30,041 · vs 29,653 · +1.3%; growth +36 vs +35 |
 | 6 | Month | "vs Jun 1–5, 2026"; 30,041 · vs 29,889 · +0.5%; growth +36 vs +15 |
-| 7 | Year to date | Prior period grays out; "FY27 to Jul 5", "vs FY26 to Jul 5"; cards 30,041 · vs 28,465 · +5.5% / +36 vs +27 / 30,025 · vs 28,461 · +5.5% |
-| 8 | Year | "12 months to Jul 5, 2026"; growth +1,576 vs +1,233; average 29,245 · vs 27,841 · +5.0% |
-| 9 | Year to date, then "FY26 · Jul to Mar" | "FY26 to Mar"; cards 29,618 · vs 28,137 · +5.3% / +1,180 vs +929 / 29,028 · vs 27,670 · +4.9% |
-| 10 | Year, then "Dec 24 to Dec 25" | "12 months to Dec 2025"; 29,221 · vs 27,825 · +5.0%; growth +1,396 vs +754 |
-| 11 | Month, then "May 2026", then Quarter, Last year | The capsule reads "FY26 Q4 to May", "vs FY25 Q4 to May"; growth +256 vs +197 (a quarter to date at a month-end that isn't a quarter-end: the grid shows only quarter-ends, but the pick stays) |
-| 12 | Month, then "Jul 2023", then Year | "12 months to Jul 2023", "vs 12 months to Jul 2022"; 26,961 · vs 25,233 · +6.8% |
-| 13 | Reset | Everything as in check 1, panel closed: the last closed fiscal year again |
+| 7 | Year to date | Nothing changes: it's grayed while Prior period is on, and its tooltip says why |
+| 8 | Last year, then Year to date | "FY27 to Jul 5", "vs FY26 to Jul 5"; cards 30,041 · vs 28,465 · +5.5% / +36 vs +27 / 30,025 · vs 28,461 · +5.5% |
+| 9 | Year | "12 months to Jul 5, 2026"; growth +1,576 vs +1,233; average 29,245 · vs 27,841 · +5.0% |
+| 10 | Year to date, then "FY26 · Jul to Mar" | "FY26 to Mar"; cards 29,618 · vs 28,137 · +5.3% / +1,180 vs +929 / 29,028 · vs 27,670 · +4.9% |
+| 11 | Year, then "Dec 24 to Dec 25" | "12 months to Dec 2025"; 29,221 · vs 27,825 · +5.0%; growth +1,396 vs +754 |
+| 12 | Month, then "May 2026", then Quarter | The capsule reads "FY26 Q4 to May", "vs FY25 Q4 to May"; growth +256 vs +197 (a quarter to date at a month-end that isn't a quarter-end: the grid shows only quarter-ends, but the pick stays) |
+| 13 | Month, then "Jul 2023", then Year | "12 months to Jul 2023", "vs 12 months to Jul 2022"; 26,961 · vs 25,233 · +6.8% |
+| 14 | Reset | Everything as in check 1, panel closed: the last closed fiscal year again |
 
 ---
 
