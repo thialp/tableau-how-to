@@ -14,8 +14,8 @@ Build one picker that switches a whole Tableau page between comparisons: the spa
 
 ## The steps
 
-- **In Tableau:** download the workbook from Tableau Public (the download icon under the viz) and open its tabs **Step 1** to **Step 14**. Each sheet's caption, on its left, has that step's instructions and every formula to paste.
-- **On this page:** the same 14 steps, with the reasons behind them, are in the **[step-by-step guide](GUIDE.md)**.
+- **In Tableau:** download the workbook from Tableau Public (the download icon under the viz) and open its tabs **Step 1** to **Step 15**. Each sheet's caption, on its left, has that step's instructions and every formula to paste.
+- **On this page:** the same 15 steps, with the reasons behind them, are in the **[step-by-step guide](GUIDE.md)**.
 
 ## Use it on your own data
 
