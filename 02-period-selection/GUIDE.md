@@ -2,9 +2,13 @@
 
 Build the period picker below from an empty Tableau workbook: one capsule that opens a panel, a span list (year, year to date, quarter, month), a grid of report dates that ends on **today**, two shaded windows on a line chart, number cards that compare the two windows, and a toggle that switches the comparison between last year and the prior period. The page works on a closed month-end and on a day in the middle of a month ("to date"), and every date is counted back from the latest day in the data, so no year is typed anywhere. Every step is a calculation or a click in Tableau. There is no SQL and no extension.
 
+[![The finished page on Tableau Public](images/finished.jpg)](https://public.tableau.com/app/profile/thialp/viz/HowtoBuildaPeriodPickerforYoYYTDQuarterandMonthArcadiaHow-To/Periodselection)
+
+**[Try it live on Tableau Public](https://public.tableau.com/app/profile/thialp/viz/HowtoBuildaPeriodPickerforYoYYTDQuarterandMonthArcadiaHow-To/Periodselection)**, or download the workbook there (the download icon under the viz) to open every step's sheet.
+
 **What you need:** Tableau Desktop or Tableau Public (the free app), version 2022.3 or later (for showing and hiding containers with a parameter). Plan on about two hours.
 
-**How the lesson works.** There are 15 steps, and each one builds one worksheet. The downloadable workbook on Tableau Public has the same 15 sheets, named **Step 1 · Try It** to **Step 15 · Title**; each sheet's caption (on its left) holds that step's instructions and every formula to paste. So you can follow this page, the workbook, or both side by side.
+**How the lesson works.** There are 15 steps, and each one builds one worksheet. The [downloadable workbook on Tableau Public](https://public.tableau.com/app/profile/thialp/viz/HowtoBuildaPeriodPickerforYoYYTDQuarterandMonthArcadiaHow-To/Periodselection) has the same 15 sheets, named **Step 1 · Try It** to **Step 15 · Title**; each sheet's caption (on its left) holds that step's instructions and every formula to paste. So you can follow this page, the workbook, or both side by side.
 
 **What you'll learn**
 

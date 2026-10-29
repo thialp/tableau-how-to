@@ -2,6 +2,10 @@
 
 Build one picker that switches a whole Tableau page between comparisons: the span (year, year to date, quarter or month), the report date it ends on (today, or any closed month-end), and whether it's compared with last year or the prior period. Two shaded windows on a line show exactly which days each number covers. A month-end compares with month-ends and any other day with the same day, so "to date" is always fair, and every date is counted back from the latest day in the data, so no year is typed anywhere.
 
+[![The finished page on Tableau Public](images/finished.jpg)](https://public.tableau.com/app/profile/thialp/viz/HowtoBuildaPeriodPickerforYoYYTDQuarterandMonthArcadiaHow-To/Periodselection)
+
+**[▶ Try it live on Tableau Public](https://public.tableau.com/app/profile/thialp/viz/HowtoBuildaPeriodPickerforYoYYTDQuarterandMonthArcadiaHow-To/Periodselection)**
+
 ## ⬇️ Download
 
 **[Download everything (period-selection-files.zip)](https://github.com/thialp/tableau-how-to/raw/main/02-period-selection/period-selection-files.zip)**, under 1 MB: the data (`arcadia_daily_headcount.csv`, every day from Jun 30, 2021 to Jul 5, 2026) and the images (folder `Arcadia How-To`).
@@ -14,7 +18,7 @@ Build one picker that switches a whole Tableau page between comparisons: the spa
 
 ## The steps
 
-- **In Tableau:** download the workbook from Tableau Public (the download icon under the viz) and open its tabs **Step 1** to **Step 15**. Each sheet's caption, on its left, has that step's instructions and every formula to paste.
+- **In Tableau:** download the workbook from [Tableau Public](https://public.tableau.com/app/profile/thialp/viz/HowtoBuildaPeriodPickerforYoYYTDQuarterandMonthArcadiaHow-To/Periodselection) (the download icon under the viz) and open its tabs **Step 1** to **Step 15**. Each sheet's caption, on its left, has that step's instructions and every formula to paste.
 - **On this page:** the same 15 steps, with the reasons behind them, are in the **[step-by-step guide](GUIDE.md)**.
 
 ## Use it on your own data

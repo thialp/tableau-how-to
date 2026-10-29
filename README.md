@@ -5,7 +5,7 @@ Step-by-step Tableau lessons built on **Arcadia Systems**, a fictional company w
 | # | Lesson | You'll build | Level |
 |---|---|---|---|
 | 1 | [Multi-select filters from shapes](01-multi-select-filters/) · [live](https://public.tableau.com/app/profile/thialp/viz/HowtoBuildMulti-SelectFiltersfromShapesArcadiaHow-To/Multi-selectfilters) | A rail button that opens a panel, tick lists with a parent-to-child cascade, a guard on the last option, and options that gray out across two filters | Intermediate |
-| 2 | [Period selection](02-period-selection/) | One picker for year, year to date, quarter and month, today or any closed month-end, with a fair "to date" rule, shaded comparison windows and a last-year / prior-period toggle | Intermediate |
+| 2 | [Period selection](02-period-selection/) · [live](https://public.tableau.com/app/profile/thialp/viz/HowtoBuildaPeriodPickerforYoYYTDQuarterandMonthArcadiaHow-To/Periodselection) | One picker for year, year to date, quarter and month, today or any closed month-end, with a fair "to date" rule, shaded comparison windows and a last-year / prior-period toggle | Intermediate |
 
 ## How each lesson is laid out
 
