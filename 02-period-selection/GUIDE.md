@@ -875,8 +875,8 @@ Dashboard **Period selection**, Fixed 1400 × 850, shading `#F3F3EF`, every item
 | Rail (vertical container) | 0 | 0 | 216 | 850 | Navy `#13233A`, padding 8 left and right |
 | Title (sheet) | 240 | 8 | 1136 | 78 | Three lines need the full 78 px, or the subtitle is cut |
 | Lesson card (text and images in a white container) | 240 | 88 | 600 | 724 | What the page is, the images, how to try it, how to build it, how to use your own data |
-| KPI End / Growth / Average (each in a white container) | 872 / 1044 / 1216 | 88 | 160 | 96 | Radius 14, border 1 px `#E4E3DD`, padding 14 |
-| Chart card (white container) | 872 | 196 | 504 | 616 | Text "Employees at each month-end" Semibold 11 navy, then Try It, then Windows |
+| KPI End / Growth / Average (each in a white container) | 872 / 1044 / 1216 | 88 | 160 | 116 | Radius 14, border 1 px `#E4E3DD`, padding 14. Three lines need 88 px inside, or Tableau shows ##### |
+| Chart card (white container) | 872 | 216 | 504 | 596 | Text "Employees at each month-end" Semibold 11 navy, then Try It, then Windows |
 | Footnote (text) | 240 | 822 | 1136 | 18 | "Arcadia Systems is fictional; all data is synthetic. Executive officers excluded. Fiscal year starts July 1." Book 9 `#5A6170` |
 | Period Popover | 216 | 96 | 640 | 280 | Visibility `p_PeriodOpen` |
 
