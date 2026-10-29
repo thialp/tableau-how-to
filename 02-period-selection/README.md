@@ -13,7 +13,7 @@ Build one picker that switches a whole Tableau page between comparisons: the spa
 ## Get started
 
 1. Unzip the file.
-2. Move the folder **Arcadia How-To** into `Documents/My Tableau Repository/Shapes/` (on Windows, `Documents\My Tableau Repository\Shapes\`), replacing How-To #1's folder if you have it, then restart Tableau.
+2. Move the folder **Arcadia How-To** into `Documents/My Tableau Repository/Shapes/` (on Windows, `Documents\My Tableau Repository\Shapes\`), then restart Tableau. If How-To #1's **Arcadia How-To** folder is already there, copy these images into it instead of replacing the folder, so both lessons keep their images.
 3. Open a new Tableau workbook, connect to `arcadia_daily_headcount.csv`, and follow the steps.
 
 ## The steps
