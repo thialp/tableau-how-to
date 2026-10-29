@@ -4,21 +4,22 @@ Build the period picker below from an empty Tableau workbook: one capsule that o
 
 **What you need:** Tableau Desktop or Tableau Public (the free app), version 2022.3 or later (for showing and hiding containers with a parameter). Plan on about two hours.
 
-**How the lesson works.** There are 14 steps, and each one builds one worksheet. The downloadable workbook on Tableau Public has the same 14 sheets, named **Step 1 · Try It** to **Step 14 · Title**; each sheet's caption (on its left) holds that step's instructions and every formula to paste. So you can follow this page, the workbook, or both side by side.
+**How the lesson works.** There are 15 steps, and each one builds one worksheet. The downloadable workbook on Tableau Public has the same 15 sheets, named **Step 1 · Try It** to **Step 15 · Title**; each sheet's caption (on its left) holds that step's instructions and every formula to paste. So you can follow this page, the workbook, or both side by side.
 
 **What you'll learn**
 
 | Steps | Technique | Used for |
 |---|---|---|
 | 2–3 | An image as a button, a container shown by a parameter, the deselect trick | The rail capsule and the panel it opens |
-| 4 | A list where exactly one option is ticked, drawn from a "menu field" | Year, year to date, quarter, month |
+| 4 | A list where exactly one option is ticked, drawn from a "menu field", with a hint under each option | Year, year to date, quarter, month |
 | 5 | An integer parameter that counts months back from the latest day | A report date that never names a year, and today as one of the choices |
-| 5 | A grid with a row per fiscal year | Picking any of 37 report dates with one click |
+| 5 | A grid whose cells describe themselves, and change with the span | Picking today or a closed month-end, reading the exact window before you click |
 | 6 | The to-date rule: a month-end looks back to month-ends, any other day to the same day | The current window and the window it's compared with |
 | 6 | Reference bands driven by calculated fields, and a chart that zooms to them | Two shaded windows that follow every click |
 | 8–10 | Balances versus flows | Why the closing number ignores the span, and growth and averages don't |
-| 11–12 | A segmented toggle made of two image buttons, on your own | Compare with last year, or with the prior period |
-| 13 | Reset to default view | One click back to the start |
+| 11–13 | A segmented toggle made of two image buttons, on your own, and a color key under it | Compare with last year, or with the prior period |
+| 7–15 | Tooltips that explain every number, and a subtitle that says what the page is | A page people understand before they click |
+| 14 | Reset to default view | One click back to the start |
 
 Arcadia Systems is a fictional company. All data is synthetic.
 
@@ -48,8 +49,9 @@ Arcadia Systems is a fictional company. All data is synthetic.
 - [Part 5: your turn, reset, and the finished page](#part-5-your-turn-reset-and-the-finished-page)
    - [Step 11: your turn, compare with the prior period](#step-11-your-turn-compare-with-the-prior-period)
    - [Step 12: the second half of the toggle](#step-12-the-second-half-of-the-toggle)
-   - [Step 13: reset to default view](#step-13-reset-to-default-view)
-   - [Step 14: the title, and the finished page](#step-14-the-title-and-the-finished-page)
+   - [Step 13: the comparison under the toggle](#step-13-the-comparison-under-the-toggle)
+   - [Step 14: reset to default view](#step-14-reset-to-default-view)
+   - [Step 15: the title, and the finished page](#step-15-the-title-and-the-finished-page)
 - [Use it on your own data](#use-it-on-your-own-data)
 - [Checks](#checks)
 - [Why it works this way](#why-it-works-this-way)
@@ -87,7 +89,7 @@ If you did How-To #1, replace the old folder: this one holds the same seven imag
 | `seg_left_off.png` | 200 × 64 | Left half of the toggle, not chosen |
 | `seg_right_on.png` | 200 × 64 | Right half of the toggle, chosen |
 | `seg_right_off.png` | 200 × 64 | Right half of the toggle, not chosen |
-| `reset_button.png` | 600 × 96 | "Reset to default view" (Step 13) |
+| `reset_button.png` | 600 × 96 | "Reset to default view" (Step 14) |
 | `popover_line.png` | 1248 × 18 | The thin line under a panel's title |
 | `rail_divider.png` | 400 × 48 | The line across the rail |
 | `arcadia_logo_reverse.png` | 1200 × 326 | The logo for the rail |
@@ -212,7 +214,7 @@ FALSE
 1. Create a new dashboard, **Period selection**, size **Fixed 1400 × 850**. Shading `#F3F3EF`.
 2. Drag a **Vertical** container onto the dashboard, **floating**: x 0, y 0, w 216, h 850. Background navy `#13233A`. This is the rail.
 3. Drag **Period Field** into the rail. Hide its title. Fixed height 32.
-4. Drag another **Vertical** container, floating, to x 216, y 96, w 640, h 300. Its top lines up with the PERIOD heading in the rail. Background `#13233A`, no border. Name it **Period Popover** (Layout pane > Item hierarchy, double-click the name).
+4. Drag another **Vertical** container, floating, to x 216, y 96, w 640, h 400. Its top lines up with the PERIOD heading in the rail. Background `#13233A`, no border. Name it **Period Popover** (Layout pane > Item hierarchy, double-click the name).
 5. Into **Period Popover** drag a **Text** object: `Period`, Tableau Bold 12, white. Fixed height 44. This is the panel's title; Step 3 adds the ✕ beside it.
 6. Select **Period Popover**. In the Layout pane tick **Control visibility using value**, and pick **Parameters > p_PeriodOpen**.
 7. **Dashboard > Actions > Add Action > Change Parameter**:
@@ -296,6 +298,15 @@ ELSE "Month" END
 ```
 
 ```
+// Span Hint
+CASE [Span No]
+WHEN 1 THEN "12 months to the date"
+WHEN 2 THEN "From Jul 1 to the date"
+WHEN 3 THEN "From the quarter's start"
+ELSE "From the 1st of the month" END
+```
+
+```
 // Span Pick
 MIN([Span Option])
 ```
@@ -310,16 +321,19 @@ IF MIN([Span Option]) = [p_Span] THEN "tick_on" ELSE "tick_off" END
 MIN(0.6)
 ```
 
+`Span Hint` is the line under each option: what the span means, in a few words, so nobody has to guess what "Quarter" covers.
+
 How `Span No` reads: `(MONTH + 5) % 12` turns July into 0 and June into 11, the month's place in a fiscal year that starts in July. Dividing by 3 and keeping the whole part gives 0 to 3; adding 1 gives the fiscal quarter, 1 to 4. `Tick X` puts every box at the same spot near the left of a 0-to-10 axis, a little in from the edge so the box isn't cut in half.
 
 3. Right-click `Span No` in the Data pane > **Convert to Dimension**, then **Convert to Discrete**.
 4. New sheet **Span List**:
    - Rows `Span No` (header hidden: right-click > untick **Show Header**). Columns `Tick X`; right-click the axis > Edit Axis: Fixed **0 to 10**; then untick **Show Header**.
    - Marks **Shape**, Shape `Span Shape`: assign `tick_on.png` to `tick_on` and `tick_off.png` to `tick_off` (palette Arcadia How-To). Size: one step left of the middle of the slider.
-   - Label: type two spaces, then insert `Span Option`: `  <Span Option>`. Tableau Book 10, `#E4E9F0`; alignment left, middle. Under Label, tick **Allow labels to overlap other marks**.
+   - Label, two lines: `  <Span Option>` Tableau Book 10 `#E4E9F0`, then `  <Span Hint>` Tableau Book 8 `#8FA0B8`; alignment left, middle. Under Label, tick **Allow labels to overlap other marks**. Rows about 44 px high.
    - Detail `Span Pick`, `zzTrue`, `zzFalse`.
-   - Format: shading None, row and column dividers None, grid lines None, zero lines None. Fit **Entire View**. Tooltip off (Tooltip > untick **Show tooltips**).
-5. On your dashboard, put **Span List** inside **Period Popover**, under the title, width 200.
+   - Tooltip: `<Span Option>` Tableau Semibold 10, then `<Span Hint>. Click to pick it; the cards and the line follow.` Tableau Book 9, command buttons off.
+   - Format: shading None, row and column dividers None, grid lines None, zero lines None. Fit **Entire View**.
+5. On your dashboard, put **Span List** inside **Period Popover**, under the title, width 170.
 6. Actions:
 
    | Name | Type | Source | Target | Field |
@@ -327,17 +341,19 @@ How `Span No` reads: `(MONTH + 5) % 12` turns July into 0 and June into 11, the 
    | Pick span | Change Parameter | Span List | p_Span | Span Pick (aggregation None) |
    | Deselect Span List | Filter | Span List | Span List | `zzTrue` → `zzFalse` |
 
-**You should see** four rows, Year to Month, with Year to date ticked. Click Quarter: the tick moves. Click Quarter again: it stays. Nothing else on the page uses `p_Span` yet; Step 6 changes that.
+**You should see** four rows, Year to Month, each with its hint, and Year to date ticked. Click Quarter: the tick moves. Click Quarter again: it stays. Nothing else on the page uses `p_Span` yet; Step 6 changes that.
 
 ---
 
 ### Step 5: the report date grid
 
-**Why.** The report date is where every period ends. Most of the time people want **today**, with the period so far ("year to date"); sometimes they want a closed month-end, to see a finished month, quarter or year. So the grid offers every closed month-end, plus today in the current month.
+**Why.** The report date is where every period ends. Most of the time people want **today**, with the period so far ("year to date"); sometimes they want a closed month-end, to see a finished month, quarter or year. So the grid offers today, and the closed month-ends before it.
 
-Storing the report date as a date would mean typing a year into the parameter, and a year typed today is wrong next year. So the parameter stores **how many months back from the latest month**: 0 is the latest month, which ends today (Jul 5, 2026); 1 is the month-end before it (Jun 30, 2026); 3 is Apr 30. When a new day arrives in the data, 0 moves with it, and so does everything built on it.
+A grid of bare month names asks people to imagine what a click will do. So every cell describes its own window, in the words of the span you picked: with Year picked, the cell for June 2026 reads "Jun 25 to Jun 26"; with Year to date, "FY26 · Jul to Jun"; with Month, "Jun 2026". Today's cell reads "Jul 5, 25 to Jul 5, 26", "FY27 · Jul 1 to Jul 5" or "Jul 1 to Jul 5, 2026". Today sits alone in the top row, and each column below it is one fiscal year, newest first. A year, a year to date or a quarter is offered at each quarter-end; a month at every month-end.
 
-The grid offers the report dates that have two full years of data behind them: one year for their own window, one for the year they're compared with. The data starts on Jun 30, 2021, so the grid starts on Jul 31, 2023: three whole fiscal years, plus today. As new days arrive, the grid grows by itself.
+Storing the report date as a date would mean typing a year into the parameter, and a year typed today is wrong next year. So the parameter stores **how many months back from the latest month**: 0 is the latest month, which ends today (Jul 5, 2026); 1 is the month-end before it (Jun 30, 2026); 4 is Mar 31. When a new day arrives in the data, 0 moves with it, and so does everything built on it.
+
+The grid offers the report dates that have two full years of data behind them: one year for their own window, one for the year they're compared with. The data starts on Jun 30, 2021, so the grid starts in July 2023: three whole fiscal years, plus today. As new days arrive, the grid grows by itself.
 
 **Do.**
 
@@ -347,16 +363,11 @@ The grid offers the report dates that have two full years of data behind them: o
    |---|---|---|
    | `p_Back` | Integer | 0 |
 
-2. Create:
+2. Create the report date and the click:
 
 ```
 // Report Date
 MIN([Latest], DATE(DATEADD('day', -1, DATEADD('month', 1 - [p_Back], DATETRUNC('month', [Latest])))))
-```
-
-```
-// Month Offered
-[as_of_date] > DATEADD('month', 24, [First Month])
 ```
 
 ```
@@ -370,28 +381,6 @@ MIN([Months Back])
 ```
 
 ```
-// FY Label
-"FY" + RIGHT(STR(YEAR([as_of_date]) + (IF MONTH([as_of_date]) >= 7 THEN 1 ELSE 0 END)), 2)
-```
-
-```
-// Fiscal Month No
-((MONTH([as_of_date]) + 5) % 12) + 1
-```
-
-```
-// Month Abbr
-LEFT(DATENAME('month', [as_of_date]), 3)
-```
-
-```
-// Month Label
-IF MIN([Months Back]) = 0 AND DAY(DATEADD('day', 1, MAX([as_of_date]))) <> 1
-THEN MIN([Month Abbr]) + " " + STR(DAY(MAX([as_of_date])))
-ELSE MIN([Month Abbr]) END
-```
-
-```
 // Month State
 IF MIN([Months Back]) = [p_Back] THEN "picked" ELSE "open" END
 ```
@@ -400,24 +389,112 @@ How `Report Date` reads, inside out: `DATETRUNC('month', [Latest])` is the first
 
 `Months Back` is the reverse trip: how many months a day sits before `Latest`. Every day in March 2026 is 4 months back, so a click anywhere in the March cell writes 4 into `p_Back`, and `Report Date` turns 4 back into Mar 31, 2026.
 
-`Month Label` writes the day next to the month only in the cell for the latest month, when that month isn't finished: "Jul 5". The test `DAY(DATEADD('day', 1, d)) = 1` asks "is tomorrow the 1st?", which is true only on a month-end.
+3. Create what each cell knows about itself. A cell is one month of days, so it first finds its own last day: the month-end for a closed month, today for the current one.
 
-3. Right-click `Fiscal Month No` in the Data pane > **Convert to Dimension**, then **Convert to Discrete**.
-4. New sheet **Month Grid**:
-   - Drag `Month Offered` to Filters and keep **True**.
-   - Rows `FY Label`. Columns `Fiscal Month No`, header hidden. The row header stays: it labels each row FY24 to FY27. Format the row header Tableau Semibold 9 `#8FA0B8`.
-   - Marks **Text**. Drag `Month Label` to Text and `Month State` to Color. Click **Color** > Edit Colors: `picked` teal `#51C69E`, `open` `#B8C4D6`. Text Tableau Book 9, centered. The label takes the mark's color, so the picked cell turns teal.
+```
+// Last Close
+DATE(DATEADD('day', -1, DATETRUNC('month', DATEADD('day', 1, [Latest]))))
+```
+
+```
+// Cell Close
+{ FIXED DATETRUNC('month', [as_of_date]) : MAX([as_of_date]) }
+```
+
+```
+// Cell Is Today
+[Cell Close] = [Latest] AND [Cell Close] > [Last Close]
+```
+
+```
+// Cell FY
+"FY" + RIGHT(STR(YEAR([Cell Close]) + (IF MONTH([Cell Close]) >= 7 THEN 1 ELSE 0 END)), 2)
+```
+
+```
+// Cell Mon
+LEFT(DATENAME('month', [Cell Close]), 3)
+```
+
+```
+// Cell Day
+[Cell Mon] + " " + STR(DAY([Cell Close])) + ", " + STR(YEAR([Cell Close]))
+```
+
+```
+// Cell Label
+CASE [p_Span]
+WHEN "Year" THEN (IF [Cell Is Today]
+    THEN [Cell Mon] + " " + STR(DAY([Cell Close])) + ", " + RIGHT(STR(YEAR([Cell Close]) - 1), 2)
+         + " to " + [Cell Mon] + " " + STR(DAY([Cell Close])) + ", " + RIGHT(STR(YEAR([Cell Close])), 2)
+    ELSE [Cell Mon] + " " + RIGHT(STR(YEAR([Cell Close]) - 1), 2) + " to " + [Cell Mon] + " " + RIGHT(STR(YEAR([Cell Close])), 2) END)
+WHEN "Year to date" THEN [Cell FY] + " · "
+    + (IF [Cell Is Today] THEN "Jul 1 to " + [Cell Mon] + " " + STR(DAY([Cell Close]))
+       ELSEIF MONTH([Cell Close]) = 7 THEN "Jul" ELSE "Jul to " + [Cell Mon] END)
+WHEN "Quarter" THEN [Cell FY] + " Q" + STR(INT(((MONTH([Cell Close]) + 5) % 12) / 3) + 1) + " · "
+    + LEFT(DATENAME('month', DATEADD('month', -((MONTH([Cell Close]) - 1) % 3), [Cell Close])), 3)
+    + (IF [Cell Is Today] THEN " 1 to " + [Cell Mon] + " " + STR(DAY([Cell Close])) ELSE " to " + [Cell Mon] END)
+ELSE (IF [Cell Is Today] THEN [Cell Mon] + " 1 to " + [Cell Mon] + " " + STR(DAY([Cell Close])) + ", " + STR(YEAR([Cell Close]))
+      ELSE [Cell Mon] + " " + STR(YEAR([Cell Close])) END) END
+```
+
+```
+// Cell Kind
+IF [Cell Is Today] THEN "today, the latest day in the data" ELSE "a closed month-end" END
+```
+
+```
+// Cell Headcount
+SUM(IF [as_of_date] = [Cell Close] THEN [employees] END)
+```
+
+`Last Close` is the last finished month-end: Jun 30, 2026. `Cell Close` uses a FIXED level of detail on the month, so every day of a month knows that month's last day. `Cell Is Today` is true only for the month still in progress. `Cell Label` writes the window in the words of the span, and the year of a Year label counts back one year from the cell's own date.
+
+4. Place the cells: today alone in the top row, then one column per fiscal year, newest first; a row per quarter-end, or per month when Month is picked.
+
+```
+// Month Offered
+[as_of_date] > DATEADD('month', 24, [First Month])
+```
+
+```
+// Grid Shown
+[Month Offered] AND ([Cell Is Today] OR [p_Span] = "Month" OR MONTH([Cell Close]) % 3 = 0)
+```
+
+```
+// Grid Col
+IF [Cell Is Today] THEN 0
+ELSE (YEAR([Last Close]) + (IF MONTH([Last Close]) >= 7 THEN 1 ELSE 0 END))
+   - (YEAR([Cell Close]) + (IF MONTH([Cell Close]) >= 7 THEN 1 ELSE 0 END)) END
+```
+
+```
+// Grid Row
+IF [Cell Is Today] THEN 0
+ELSEIF [p_Span] = "Month" THEN 12 - (MONTH([Cell Close]) + 5) % 12
+ELSE 4 - INT(((MONTH([Cell Close]) + 5) % 12) / 3) END
+```
+
+`Grid Col` is how many fiscal years a cell sits before the last closed one: FY26 is 0, FY25 is 1, FY24 is 2, and today joins the first column. `Grid Row` puts June at the top of each column and July at the bottom (with Month picked), or the June quarter-end at the top and September at the bottom; `MONTH % 3 = 0` keeps only the quarter-ends (Sep, Dec, Mar, Jun) for the other spans.
+
+5. Right-click `Grid Row` and `Grid Col` in the Data pane > **Convert to Dimension**, then **Convert to Discrete**.
+6. New sheet **Month Grid**:
+   - Drag `Grid Shown` to Filters and keep **True**.
+   - Rows `Grid Row`, Columns `Grid Col`, both headers hidden. The labels say everything.
+   - Marks **Text**. Drag `Cell Label` to Text and `Month State` to Color. Click **Color** > Edit Colors: `picked` teal `#51C69E`, `open` `#B8C4D6`. Text Tableau Book 9, left. The label takes the mark's color, so the picked cell turns teal.
    - Detail `Month Pick`, `zzTrue`, `zzFalse`.
-   - Format: shading None, dividers None, grid lines None. Rows about 26 px high. Fit **Entire View**. Tooltip off.
-5. Put **Month Grid** in **Period Popover** to the right of Span List (width 420).
-6. Actions:
+   - Tooltip, three lines: `<Cell Label>` Tableau Semibold 10; `Report date <Cell Day>: <Cell Kind>` Tableau Book 9; `<Cell Headcount> employees that day. Click to end the period here.` Tableau Book 9. Command buttons off.
+   - Format: shading None, dividers None, grid lines None. Rows about 22 px high. Fit **Entire View**.
+7. Put **Month Grid** in **Period Popover** to the right of Span List (width 450).
+8. Actions:
 
    | Name | Type | Source | Target | Field |
    |---|---|---|---|---|
    | Pick month | Change Parameter | Month Grid | p_Back | Month Pick (aggregation None) |
    | Deselect Month Grid | Filter | Month Grid | Month Grid | `zzTrue` → `zzFalse` |
 
-**You should see** four rows, FY24 to FY27, Jul to Jun across. FY27 has one cell, "Jul 5", in teal. Click Jun in FY26: it turns teal and `p_Back` is 1. Click Mar in FY26: `p_Back` is 4. Click Jul in FY24: 36, the oldest date offered. Click "Jul 5" to go back to today.
+**You should see**, with Year to date picked: "FY27 · Jul 1 to Jul 5" in teal at the top, then three columns, FY26 to FY24, with four cells each: "FY26 · Jul to Jun", "FY26 · Jul to Mar", "FY26 · Jul to Dec", "FY26 · Jul to Sep", and so on. Pick Year and the same cells read "Jul 5, 25 to Jul 5, 26", "Jun 25 to Jun 26", "Mar 25 to Mar 26"... Pick Month and every month-end appears: twelve rows under today. Click "Jun 25 to Jun 26": `p_Back` is 1. Click today's cell to go back.
 
 ---
 
@@ -617,7 +694,18 @@ A year that closes on Jun 30 is a fiscal year, so it's called FY26; one that clo
 
      with the format **Number, 0 decimals, thousands separator**. Drag it to Label: Tableau Semibold 9 navy, **Allow labels to overlap other marks**. Every other day has no value, so only the two closing points show a number.
 
-5. **The zoom.** Five years of days make a five-day window a sliver. Create
+5. **The tooltip.** Hovering a day should say which window it belongs to. Create
+
+   ```
+   // Tip Window
+   IF MIN([In Current]) THEN "In the period: " + MIN([Now Name])
+   ELSEIF MIN([In Comparison]) THEN "In the comparison: " + MIN([Before Name])
+   ELSE "Outside both windows" END
+   ```
+
+   and set the tooltip to three lines: `<as_of_date>` Tableau Semibold 10; `<Headcount> employees` Tableau Book 10; `<Tip Window>` Tableau Book 9 `#5A6170`.
+
+6. **The zoom.** Five years of days make a five-day window a sliver. Create
 
    ```
    // In View
@@ -641,7 +729,7 @@ A year that closes on Jun 30 is a fiscal year, so it's called FY26; one that clo
 
 ### Step 7: make the capsule talk
 
-**Why.** The capsule should say which period is on the page, and the line under it what it's compared with.
+**Why.** The capsule should say which period is on the page, and the line under it exactly which days that is, with the same color as its band on the chart, so the rail is also the legend.
 
 **Do.**
 
@@ -654,23 +742,23 @@ A year that closes on Jun 30 is a fiscal year, so it's called FY26; one that clo
 
 ```
 // Period Sub Text
-"vs " + [Before Name]
+[Now Range]
 ```
 
-2. On **Period Field**, the label `<Period Field Text>` now follows the picks by itself.
-3. New sheet **Period Sub**: Marks Text, `<Period Sub Text>` Tableau Book 9 `#8A97A8`, left. Detail `zzTrue`, `zzFalse`; tooltip off; a deselect action. Put it in the rail under Period Field, height 20.
+2. On **Period Field**, the label `<Period Field Text>` now follows the picks by itself. Change its tooltip to two lines: `Choose the span and the report date` Tableau Semibold 10, then `Now: <Now Name>, <Now Range>` Tableau Book 9.
+3. New sheet **Period Sub**: Marks Text, one line: `■ ` in `#A8D3C2` (the current window's color), then `<Period Sub Text>` Tableau Book 9 `#B8C4D6`, left. Detail `zzTrue`, `zzFalse`; tooltip `The period's days: the green band on the chart`, command buttons off; a deselect action. Put it in the rail under Period Field, height 20.
 4. Put a text object `PERIOD` (Tableau Semibold 8, `#B8C4D6`) above the capsule.
 
 **You should see**
 
 | You pick | Capsule | Under it |
 |---|---|---|
-| Year to date, today | "FY27 to Jul 5" | vs FY26 to Jul 5 |
-| Year, today | "12 months to Jul 5, 2026" | vs 12 months to Jul 5, 2025 |
-| Month, today | "Jul 1–5, 2026" | vs Jul 1–5, 2025 |
-| Year, Jun 2026 | "FY26" | vs FY25 |
-| Year to date, Mar 2026 | "FY26 to Mar" | vs FY25 to Mar |
-| Year, Dec 2025 | "12 months to Dec 2025" | vs 12 months to Dec 2024 |
+| Year to date, today | "FY27 to Jul 5" | ■ Jul 1, 2026 – Jul 5, 2026 |
+| Year, today | "12 months to Jul 5, 2026" | ■ Jul 6, 2025 – Jul 5, 2026 |
+| Month, today | "Jul 1–5, 2026" | ■ Jul 1, 2026 – Jul 5, 2026 |
+| Year, Jun 2026 | "FY26" | ■ Jul 2025 – Jun 2026 |
+| Year to date, Mar 2026 | "FY26 to Mar" | ■ Jul 2025 – Mar 2026 |
+| Year, Dec 2025 | "12 months to Dec 2025" | ■ Jan 2025 – Dec 2025 |
 
 ---
 
@@ -697,19 +785,28 @@ SUM(IF [as_of_date] = [Comparison Close] THEN [employees] END)
 ```
 
 ```
+// End Change
+[End Now] - [End Before]
+```
+
+```
 // End Change %
 [End Now] / [End Before] - 1
 ```
 
-Formats: `End Now` and `End Before` **Number, 0 decimals, thousands separator**; `End Change %` **Custom** `+0.0%;−0.0%`, so a rise reads "+5.5%".
+Formats: `End Now` and `End Before` **Number, 0 decimals, thousands separator**; `End Change` **Custom** `+#,##0;−#,##0;0`; `End Change %` **Custom** `+0.0%;−0.0%`, so a rise reads "+5.5%".
 
-2. Sheet **KPI End**: no field on Rows or Columns. Marks **Text**, left aligned, top, three lines: `EMPLOYEES AT END` Tableau Semibold 8 `#5A6170`; `<End Now>` Tableau Bold 24 navy `#13233A`; `vs <End Before> · <End Change %>` Tableau Book 9 `#5A6170`. Detail `zzTrue`, `zzFalse`; tooltip off; a deselect action.
+2. Sheet **KPI End**: no field on Rows or Columns. Marks **Text**, left aligned, top, three lines: `EMPLOYEES AT END` Tableau Semibold 8 `#5A6170`; `<End Now>` Tableau Bold 24 navy `#13233A`; `vs <End Before> · <End Change %>` Tableau Book 9 `#5A6170`. Detail `zzTrue`, `zzFalse`; a deselect action. Tooltip, four lines (command buttons off):
+   - `<Now Day>: <End Now> employees` Tableau Semibold 10;
+   - `<Before Day>: <End Before> employees` Tableau Book 10;
+   - `Change: <End Change> (<End Change %>)` Tableau Book 10;
+   - `Headcount is a balance: the number on the closing day, whatever the span.` Tableau Book 9 `#5A6170`.
 
    Keep the first line short: a card is 160 px wide, and Tableau shows `#####` instead of a text mark whose line doesn't fit.
 
 **You should see** 30,041, "vs 28,465 · +5.5%".
 
-**Try it.** Switch Year to date to Year, Quarter and Month. The card doesn't move. That's right: all four end today and compare with the same day last year, so they end on the same two numbers. Pick Jun in FY26 and it changes to 30,005, "vs 28,438 · +5.5%". This is the question a period picker gets most often, and the next two cards are the answer to it.
+**Try it.** Switch Year to date to Year, Quarter and Month. The card doesn't move. That's right: all four end today and compare with the same day last year, so they end on the same two numbers. Open the grid and pick the June 2026 cell ("FY26 · Jul to Jun") and it changes to 30,005, "vs 28,438 · +5.5%". This is the question a period picker gets most often, and the next two cards are the answer to it.
 
 ---
 
@@ -741,9 +838,22 @@ SUM(IF [as_of_date] = [Comparison Open] THEN [employees] END)
 [End Before] - [Start Before]
 ```
 
+```
+// Now Open Day
+LEFT(DATENAME('month', [Current Open]), 3) + " " + STR(DAY([Current Open])) + ", " + STR(YEAR([Current Open]))
+```
+
+```
+// Before Open Day
+LEFT(DATENAME('month', [Comparison Open]), 3) + " " + STR(DAY([Comparison Open])) + ", " + STR(YEAR([Comparison Open]))
+```
+
 Format both growth fields **Custom** `+#,##0;−#,##0;0`.
 
-2. Sheet **KPI Growth**, built like KPI End: `GROWTH IN PERIOD`; `<Growth Now>` Tableau Bold 24 navy; `vs <Growth Before>` Tableau Book 9 `#5A6170`.
+2. Sheet **KPI Growth**, built like KPI End: `GROWTH IN PERIOD`; `<Growth Now>` Tableau Bold 24 navy; `vs <Growth Before>` Tableau Book 9 `#5A6170`. Tooltip, three lines:
+   - `<Now Name>: <Start Now> on <Now Open Day>, <End Now> on <Now Day>, <Growth Now>` Tableau Semibold 10;
+   - `<Before Name>: <Start Before> on <Before Open Day>, <End Before> on <Before Day>, <Growth Before>` Tableau Book 10;
+   - `Growth is what happened inside the window: hires, minus exits, plus transfers in and out.` Tableau Book 9 `#5A6170`.
 
 **You should see**
 
@@ -756,7 +866,7 @@ Format both growth fields **Custom** `+#,##0;−#,##0;0`.
 | Month, Jun 2026 | +131 | +104 |
 | Year to date, Mar 2026 | +1,180 | +929 |
 
-Today, year to date, quarter to date and month to date all show +36: July is the first month of FY27 and of its first quarter, so all three windows are the same five days. Pick Jun in FY26 and they come apart.
+Today, year to date, quarter to date and month to date all show +36: July is the first month of FY27 and of its first quarter, so all three windows are the same five days. Pick the June 2026 cell and they come apart.
 
 ---
 
@@ -795,7 +905,10 @@ SUM(IF [In Comparison] THEN [employees] END) / MIN([Days Before])
 
 `MIN([Days Now])` because `Days Now` is the same on every row, and Tableau needs it aggregated to divide an aggregate by it. Formats: the averages **Number, 0 decimals, thousands separator**; `Average Change %` **Custom** `+0.0%;−0.0%`.
 
-2. Sheet **KPI Average**, built like KPI End: `AVERAGE EMPLOYEES`; `<Average Now>` Tableau Bold 24 navy; `vs <Average Before> · <Average Change %>` Tableau Book 9 `#5A6170`.
+2. Sheet **KPI Average**, built like KPI End: `AVERAGE EMPLOYEES`; `<Average Now>` Tableau Bold 24 navy; `vs <Average Before> · <Average Change %>` Tableau Book 9 `#5A6170`. Tooltip, three lines:
+   - `<Now Name>: <Average Now>, the average of <Days Now> daily counts` Tableau Semibold 10;
+   - `<Before Name>: <Average Before>, the average of <Days Before> daily counts` Tableau Book 10;
+   - `The number to divide by for anything per employee, such as cost per head or turnover.` Tableau Book 9 `#5A6170`.
 
 **You should see** 30,025, "vs 28,461 · +5.5%" for FY27 to Jul 5. Year, today: 29,245, "vs 27,841 · +5.0%". FY26 (Year, Jun 2026): 29,224, "vs 27,824 · +5.0%".
 
@@ -843,7 +956,7 @@ Sheet **Basis Year**: Marks **Shape**, Shape `Basis Year Shape` (assign `seg_lef
 
 Action: **Basis to last year** (Change Parameter, Basis Year, `p_Basis` ← `Basis Year Value`), plus its deselect.
 
-In the rail: a text object `COMPARED WITH` (Tableau Semibold 8, `#B8C4D6`) under Period Sub, then a **Horizontal** container, height 32, with Basis Year (width 100) on the left. Step 12 fills the right half.
+In the rail: a text object `COMPARED WITH` (Tableau Semibold 8, `#B8C4D6`) under Period Sub, then a **Horizontal** container, height 32, with Basis Year (width 100) on the left. Step 12 fills the right half, and Step 13 puts the comparison's own key under it.
 
 </details>
 
@@ -893,7 +1006,32 @@ With Prior period, the two bands on Try It sit close together instead of a year 
 
 ---
 
-### Step 13: reset to default view
+### Step 13: the comparison under the toggle
+
+**Why.** The capsule says what the period is; the toggle says what it's compared with, so the comparison's name and days belong right under the toggle, with the sand color of its band on the chart. Read top to bottom, the rail now says the whole thing: this period, these days, compared with that period, those days.
+
+**Do.**
+
+1. Create:
+
+```
+// Basis Sub Text
+"vs " + [Before Name]
+```
+
+2. New sheet **Basis Sub**: Marks Text, two lines, left: `■ ` in `#D3CBBB` (the comparison's color), then `<Basis Sub Text>` Tableau Semibold 9 `#E4E9F0`; then `<Before Range>` Tableau Book 9 `#B8C4D6`. Detail `zzTrue`, `zzFalse`; tooltip `The comparison's days: the sand band on the chart`, command buttons off; a deselect action. Put it in the rail under the toggle, height 36.
+
+**You should see**
+
+| You pick | Under the toggle |
+|---|---|
+| Year to date, today, Last year | ■ vs FY26 to Jul 5 / Jul 1, 2025 – Jul 5, 2025 |
+| Quarter, today, Prior period | ■ vs FY26 Q4 to Apr 5 / Apr 1, 2026 – Apr 5, 2026 |
+| Year, Jun 2026, Last year | ■ vs FY25 / Jul 2024 – Jun 2025 |
+
+---
+
+### Step 14: reset to default view
 
 One button that puts every pick back and closes the panel.
 
@@ -919,7 +1057,7 @@ One button that puts every pick back and closes the panel.
 "reset_button"
 ```
 
-2. New sheet **Reset**: Marks Shape, Shape `Reset Shape` (assign `reset_button.png` to `reset_button`). Detail `Reset Span`, `Reset Back`, `Reset Basis`, `Close Panel`, `zzTrue`, `zzFalse`. Tooltip `Reset to default view`, command buttons off. Put it in the rail under the toggle, height 32.
+2. New sheet **Reset**: Marks Shape, Shape `Reset Shape` (assign `reset_button.png` to `reset_button`). Detail `Reset Span`, `Reset Back`, `Reset Basis`, `Close Panel`, `zzTrue`, `zzFalse`. Tooltip `Reset to default view: year to date, today, against last year`, command buttons off. Put it in the rail under Basis Sub, height 32.
 3. Actions, all from **Reset**, run on Select:
 
    | Target | Field |
@@ -931,22 +1069,28 @@ One button that puts every pick back and closes the panel.
 
    Plus the deselect action.
 
-**You should see** Year to date ticked, "Jul 5" teal, Last year chosen, the panel closed, and the cards back at 30,041 · +36 · 30,025.
+**You should see** Year to date ticked, today's cell teal, Last year chosen, the panel closed, and the cards back at 30,041 · +36 · 30,025.
 
 ---
 
-### Step 14: the title, and the finished page
+### Step 15: the title, and the finished page
 
-The title says what the page shows, in words that follow the picks.
+The title says what the page is, and the subtitle says right away that the data is a simulation, which day counts as today, and how the fiscal year runs, before anyone reads a number.
+
+```
+// Latest Day
+LEFT(DATENAME('month', [Latest]), 3) + " " + STR(DAY([Latest])) + ", " + STR(YEAR([Latest]))
+```
 
 ```
 // Page Subtitle
-"Employees, " + [Now Name] + " compared with " + [Before Name] + " · report date " + [Now Day]
+"A simulation: today is " + [Latest Day] + ", and the fiscal year runs July to June · "
++ [Now Name] + " compared with " + [Before Name]
 ```
 
 Sheet **Title**: Marks **Text**, three lines, left, top: `HOW-TO · STEP-BY-STEP LESSON` Tableau Semibold 9 teal `#0F6E56`; `How to build a period picker for year, year to date, quarter and month` Tableau Bold 18 navy; `<Page Subtitle>` Tableau Book 11 `#5A6170`. The first two lines say what the page is before anyone reads a number: a lesson, not an analysis. Detail `zzTrue`, `zzFalse`; tooltip off; a deselect action.
 
-**You should see** "Employees, FY27 to Jul 5 compared with FY26 to Jul 5 · report date Jul 5, 2026". No year is typed anywhere: when a newer file arrives, the title, the grid and every card move on their own.
+**You should see** "A simulation: today is Jul 5, 2026, and the fiscal year runs July to June · FY27 to Jul 5 compared with FY26 to Jul 5". No year is typed anywhere: when a newer file arrives, the title, the grid and every card move on their own.
 
 #### The finished page
 
@@ -960,11 +1104,11 @@ Dashboard **Period selection**, Fixed 1400 × 850, shading `#F3F3EF`, every item
 | KPI End / Growth / Average (each in a white container) | 872 / 1044 / 1216 | 88 | 160 | 116 | Radius 14, border 1 px `#E4E3DD`, padding 14. Three lines need 88 px inside |
 | Chart card (white container) | 872 | 216 | 504 | 596 | Text "Employees each day" Semibold 11 navy, then Try It, then Windows |
 | Footnote (text) | 240 | 822 | 1136 | 18 | "Arcadia Systems is fictional; all data is synthetic. Executive officers excluded. Fiscal year starts July 1." Book 9 `#5A6170` |
-| Period Popover | 216 | 96 | 640 | 300 | Visibility `p_PeriodOpen` |
+| Period Popover | 216 | 96 | 640 | 400 | Visibility `p_PeriodOpen`; tall enough for today and twelve months under it |
 
-Inside the rail, top to bottom: blank 24 · `arcadia_logo_reverse.png` 160 × 40 · blank 32 · PERIOD 18 · Period Field 32 · Period Sub 20 · blank 10 · COMPARED WITH 18 · the toggle 32 (Basis Year, Basis Prior) · `rail_divider.png` 24 · Reset 32 · flexible blank · a credit line at the foot, Tableau Book 9: your name in `#E4E9F0`, then "Files and guide on GitHub" in `#B9C3D1`.
+Inside the rail, top to bottom: blank 24 · `arcadia_logo_reverse.png` 160 × 40 · blank 32 · PERIOD 18 · Period Field 32 · Period Sub 20 · blank 12 · COMPARED WITH 18 · the toggle 32 (Basis Year, Basis Prior) · Basis Sub 36 · `rail_divider.png` 24 · Reset 32 · flexible blank · a credit line at the foot, Tableau Book 9: your name in `#E4E9F0`, then "Files and guide on GitHub" in `#B9C3D1`.
 
-Inside the popover, top to bottom: the title row 44 (title and ✕) · `popover_line.png` · two columns, each with a small heading (Tableau Semibold 8, `#8FA0B8`): `SPAN` over Span List (200 wide) and `REPORT DATE` over Month Grid (420 wide) · a footer text 30, Book 9 `#8FA0B8`: "Every period ends on the report date: today, or a closed month-end." Keep the footer to one line: a longer one is cut off.
+Inside the popover, top to bottom: the title row 44 (title and ✕) · `popover_line.png` · two columns, each with a small heading (Tableau Semibold 8, `#8FA0B8`): `SPAN` over Span List (170 wide) and `REPORT DATE` over Month Grid (450 wide) · a footer text 30, Book 9 `#8FA0B8`: "Every period ends on the report date: today, or a closed month-end." Keep the footer to one line: a longer one is cut off.
 
 The popover sits in front of everything; the rail in front of the page. The cards and the chart sit right of x 856, so they stay in view while the panel is open.
 
@@ -987,18 +1131,18 @@ Run these in Presentation mode, then again after publishing.
 
 | # | Do | Expect |
 |---:|---|---|
-| 1 | Nothing | Capsule "FY27 to Jul 5", "vs FY26 to Jul 5"; Year to date ticked; "Jul 5" teal; Last year chosen; cards 30,041 · vs 28,465 · +5.5% / +36 vs +27 / 30,025 · vs 28,461 · +5.5% |
-| 2 | Click the capsule, every list row, grid cell, toggle half, ✕ and Reset | Nothing stays highlighted |
+| 1 | Nothing | Subtitle starts "A simulation: today is Jul 5, 2026"; capsule "FY27 to Jul 5", ■ Jul 1, 2026 – Jul 5, 2026; under the toggle ■ vs FY26 to Jul 5; Year to date ticked; "FY27 · Jul 1 to Jul 5" teal; Last year chosen; cards 30,041 · vs 28,465 · +5.5% / +36 vs +27 / 30,025 · vs 28,461 · +5.5% |
+| 2 | Click the capsule, every list row, grid cell, toggle half, ✕ and Reset; hover each card, a grid cell and the line | Nothing stays highlighted; every tooltip names its dates |
 | 3 | Year | "12 months to Jul 5, 2026"; growth +1,576 vs +1,233; average 29,245 · vs 27,841 · +5.0%; the end card doesn't move |
 | 4 | Quarter, then Month | The same cards as check 1: all three windows are Jul 1–5 |
 | 5 | Quarter, Prior period | "vs FY26 Q4 to Apr 5"; 30,041 · vs 29,653 · +1.3%; growth +36 vs +35 |
 | 6 | Month, Prior period | "vs Jun 1–5, 2026"; 30,041 · vs 29,889 · +0.5%; growth +36 vs +15 |
-| 7 | Reset, then Jun in FY26 | "FY26 to Jun", "vs FY25 to Jun"; cards 30,005 · vs 28,438 · +5.5% / +1,567 vs +1,230 / 29,224 · vs 27,824 · +5.0% |
+| 7 | Reset, then "FY26 · Jul to Jun" | "FY26 to Jun", "vs FY25 to Jun"; cards 30,005 · vs 28,438 · +5.5% / +1,567 vs +1,230 / 29,224 · vs 27,824 · +5.0% |
 | 8 | Quarter | "FY26 Q4", "vs FY25 Q4"; growth +387 vs +301; average 29,813 · vs 28,290 · +5.4% |
-| 9 | Year to date, then Mar in FY26 | "FY26 to Mar"; cards 29,618 · vs 28,137 · +5.3% / +1,180 vs +929 / 29,028 · vs 27,670 · +4.9% |
-| 10 | Year, then Dec in FY26 | "12 months to Dec 2025"; 29,221 · vs 27,825 · +5.0%; growth +1,396 vs +754 |
-| 11 | Quarter, then May in FY26 | "FY26 Q4 to May", "vs FY25 Q4 to May"; growth +256 vs +197 |
-| 12 | Year, then Jul in FY24 | "12 months to Jul 2023", "vs 12 months to Jul 2022"; 26,961 · vs 25,233 · +6.8% |
+| 9 | Year to date, then "FY26 · Jul to Mar" | "FY26 to Mar"; cards 29,618 · vs 28,137 · +5.3% / +1,180 vs +929 / 29,028 · vs 27,670 · +4.9% |
+| 10 | Year, then "Dec 24 to Dec 25" | "12 months to Dec 2025"; 29,221 · vs 27,825 · +5.0%; growth +1,396 vs +754 |
+| 11 | Month, then "May 2026", then Quarter | The capsule reads "FY26 Q4 to May", "vs FY25 Q4 to May"; growth +256 vs +197 (a quarter to date at a month-end that isn't a quarter-end: the grid shows only quarter-ends, but the pick stays) |
+| 12 | Month, then "Jul 2023", then Year | "12 months to Jul 2023", "vs 12 months to Jul 2022"; 26,961 · vs 25,233 · +6.8% |
 | 13 | Reset | Everything as in check 1, panel closed |
 
 ---
