@@ -2,11 +2,13 @@
 
 Build the filter panel below from an empty Tableau workbook: a button that opens a panel, a list you tick and untick, departments that follow their function, a last option that can't be unticked, and options that gray out when nobody is behind them. Every step is a calculation or a click in Tableau. There is no SQL and no extension.
 
-<!-- Screenshot goes here after the build: ![The finished filter panel](images/finished.png) -->
+[![The finished page on Tableau Public](images/finished.jpg)](https://public.tableau.com/app/profile/thialp/viz/HowtoBuildMulti-SelectFiltersfromShapesArcadiaHow-To/Multi-selectfilters)
+
+**[Try it live on Tableau Public](https://public.tableau.com/app/profile/thialp/viz/HowtoBuildMulti-SelectFiltersfromShapesArcadiaHow-To/Multi-selectfilters)**, or download the workbook there (the download icon under the viz) to open every step's sheet.
 
 **What you need:** Tableau Desktop or Tableau Public (the free app), version 2022.3 or later (for showing and hiding containers with a parameter). Plan on about two hours.
 
-**How the lesson works.** There are 17 steps, and each one builds one worksheet. The downloadable workbook on Tableau Public has the same 17 sheets, named **Step 1 · Try It** to **Step 17 · Title**; each sheet's caption (on its left) holds that step's instructions and every formula to paste. So you can follow this page, the workbook, or both side by side.
+**How the lesson works.** There are 17 steps, and each one builds one worksheet. The [downloadable workbook on Tableau Public](https://public.tableau.com/app/profile/thialp/viz/HowtoBuildMulti-SelectFiltersfromShapesArcadiaHow-To/Multi-selectfilters) has the same 17 sheets, named **Step 1 · Try It** to **Step 17 · Title**; each sheet's caption (on its left) holds that step's instructions and every formula to paste. So you can follow this page, the workbook, or both side by side.
 
 **What you'll learn**
 
