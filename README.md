@@ -5,7 +5,7 @@ Step-by-step Tableau lessons built on **Arcadia Systems**, a fictional company w
 | # | Lesson | You'll build | Level |
 |---|---|---|---|
 | 1 | [Multi-select filters from shapes](01-multi-select-filters/) · [live](https://public.tableau.com/app/profile/thialp/viz/HowtoBuildMulti-SelectFiltersfromShapesArcadiaHow-To/Multi-selectfilters) | A rail button that opens a panel, tick lists with a parent-to-child cascade, a guard on the last option, and options that gray out across two filters | Intermediate |
-| 2 | Period selection *(coming next)* | Year over year, year to date, quarter and month comparisons from one picker | Intermediate |
+| 2 | [Period selection](02-period-selection/) · [live](https://public.tableau.com/app/profile/thialp/viz/HowtoBuildaPeriodPickerforYoYYTDQuarterandMonthArcadiaHow-To/Periodselection) | One picker for year, year to date, quarter and month, today or any closed month-end, with a fair "to date" rule, shaded comparison windows and a last-year / prior-period toggle | Intermediate |
 
 ## How each lesson is laid out
 
@@ -24,7 +24,7 @@ The finished workbook for each lesson is on Tableau Public with **download on**:
 
 ## The data
 
-Every lesson uses the same company: 30,005 employees across 8 functions, 31 departments, 5 regions, 22 countries and 35 offices. Column names stay the same from lesson to lesson, so the calculations you build in one paste straight into the next.
+Every lesson uses the same company: 30,005 employees on Jun 30, 2026 across 8 functions, 31 departments, 5 regions, 22 countries and 35 offices. Lesson 1 has one row per employee on that date; lesson 2 has employee counts on every day from Jun 2021 to Jul 5, 2026. Column names stay the same from lesson to lesson, so the calculations you build in one paste straight into the next.
 
 Arcadia Systems is fictional and all data is synthetic. Any resemblance to a real company or person is a coincidence.
 
